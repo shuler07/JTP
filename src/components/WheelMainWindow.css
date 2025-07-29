@@ -1,0 +1,153 @@
+#wheelMainWindow {
+    flex-grow: 1000;
+    min-width: 400px;
+    max-width: 1200px;
+    height: 600px;
+    position: relative;
+    background: linear-gradient(#3750BB, #3C4B8F);
+    border-radius: 24px;
+    box-shadow: #00000020 0px 0px 20px;
+    contain: paint;
+}
+
+
+
+#wheelMainWindowImage {
+    width: 1200px;
+    position: absolute;
+    top: -700px;
+    left: calc((100% - 1200px) / 2);
+}
+
+
+
+#wheelMainWindowArrow {
+    position: absolute;
+    left: calc((100% - 34px) / 2);
+    bottom: 50px;
+}
+
+
+
+#wheelMainWindowBlur {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
+    background: linear-gradient(#3750BB, #3C4B8F00 80%);
+}
+
+
+
+#wheelMainWindowSpin {
+    padding: 16px 32px;
+    color: white;
+    font-family: montserratSemiBold;
+    font-size: 1em;
+    font-weight: normal;
+    background: linear-gradient(to right, #318731, #509E49);
+    border: solid 2px #FFFFFF22;
+    border-radius: 24px;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    transition: all 0.5s ease;
+}
+
+#wheelMainWindowSpin:hover:not(:disabled) {
+    scale: 1.05;
+    border: solid 2px white;
+}
+
+#wheelMainWindowSpin:disabled {
+    scale: 0.95;
+    border: soild 2px #00000022;
+    background: #666666;
+    transition: scale 0.5s ease;
+}
+
+
+
+#wheelMainWindowResult {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: wheelMainWindowResultAnim 5s forwards;
+}
+
+@keyframes wheelMainWindowResultAnim {
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+
+
+
+#wheelMainWindowResultColor {
+    opacity: 0;
+    font-size: 3em;
+    animation: wheelMainWindowResultColorAnim 5s forwards;
+}
+
+@keyframes wheelMainWindowResultColorAnim {
+    10% {
+        translate: 0px -100px;
+        scale: 3;
+        opacity: 0;
+    }
+    20% {
+        translate: 0px -10px;
+        scale: 1.5;
+    }
+    40% {
+        opacity: 1;
+    }
+    80% {
+        translate: 0px 0px;
+        scale: 1;
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+
+
+#wheelMainWindowResultProfit {
+    opacity: 0;
+    font-size: 1.5em;
+    animation: wheelMainWindowResultProfitAnim 5s forwards;
+}
+
+@keyframes wheelMainWindowResultProfitAnim {
+    40% {
+        translate: 0px 20px;
+        opacity: 0;
+    }
+    60% {
+        translate: 0px 0px;
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

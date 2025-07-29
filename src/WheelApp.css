@@ -1,0 +1,14 @@
+#wheelSection {
+    margin: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+
+
+#wheelSideWindows {
+    flex-grow: 1;
+    min-width: 400px;
+    width: min(644px, 100%);
+}

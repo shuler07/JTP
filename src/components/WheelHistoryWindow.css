@@ -1,0 +1,38 @@
+#wheelHistoryWindow {
+    margin-top: 20px;
+    width: 100%;
+    height: 200px;
+    background: #383838;
+    border-radius: 24px;
+    box-shadow: #00000020 0px 0px 20px;
+    position: relative;
+}
+
+
+
+#wheelHistoryWindow > h2 {
+    padding-left: 20px;
+    padding-top: 20px;
+    font-size: 1.5em;
+}
+
+
+
+#wheelHistoryContainer {
+    margin: 20px 20px 0px 20px;
+    display: flex;
+    gap: 10px;
+}
+
+
+
+.wheelHistoryElement {
+    width: 30px;
+    height: 110px;
+    border-radius: 6px;
+}
+
+.wheelHistoryElement.Red { background: #FF4B4B; }
+.wheelHistoryElement.Black { background: #181818; }
+.wheelHistoryElement.Yellow { background: #DEC84A; }
+.wheelHistoryElement.Green { background: #56D86A; }

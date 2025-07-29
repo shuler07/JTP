@@ -1,0 +1,42 @@
+#root {
+    width: 100%;
+    height: 100dvh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(#1A1A1A, #2C2C2C);
+    z-index: 0;
+}
+
+.bgCircle {
+    position: absolute;
+    background: radial-gradient(#408CFF, #823891 70%);
+    border-radius: 1000px;
+    filter: blur(20px);
+    z-index: -1;
+}
+
+.bgCircle.little {
+    width: 10dvw;
+    height: 10dvw;
+    animation: bgCircleAnim 7s infinite;
+}
+
+.bgCircle.medium {
+    width: 15dvw;
+    height: 15dvw;
+    animation: bgCircleAnim 9s infinite;   
+}
+
+.bgCircle.large {
+    width: 20dvw;
+    height: 20dvw;
+    animation: bgCircleAnim 11s infinite;
+}
+
+@keyframes bgCircleAnim {
+    50% {
+        translate: 0px 30px;
+    }
+}

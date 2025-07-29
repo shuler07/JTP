@@ -1,0 +1,30 @@
+#headerInfoContainer {
+    display: flex;
+    align-items: center;
+}
+
+#headerInfoImage {
+    margin-left: 10px;
+}
+
+#headerInfoImage:hover + #headerInfoPopup {
+    visibility: visible;
+    opacity: 100;
+    translate: 0px 10px;
+}
+
+#headerInfoPopup {
+    content: '';
+    position: absolute;
+    top: 60px;
+    padding: 10px;
+    max-width: 25dvw;
+    visibility: hidden;
+    background: rgba(0, 0, 0, 0.2);
+    border: solid 2px rgb(255, 255, 255, 0.6);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    z-index: 1;
+    transition: all 0.5s ease;
+}

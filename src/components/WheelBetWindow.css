@@ -1,0 +1,33 @@
+#wheelBetWindow {
+    width: 100%;
+    height: 380px;
+    background: linear-gradient(#202020, #2D2D2D);
+    border-radius: 24px;
+    box-shadow: #00000020 0px 0px 20px;
+}
+
+#wheelBetWindow > h2 {
+    padding-left: 20px;
+    padding-top: 20px;
+    font-size: 1.5em;
+}
+
+
+
+.wheelBetContainer {
+    margin: 20px 20px 0px 20px;
+    display: flex;
+    gap: 10px;
+}
+
+
+
+#wheelBetCustom {
+    margin: 20px 20px 0px 20px;
+    width: calc(100% - 54px);
+    height: 46px;
+}
+
+#wheelBetCustom.active {
+    border: solid 2px white;
+}

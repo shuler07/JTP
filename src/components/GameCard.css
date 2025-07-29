@@ -1,0 +1,104 @@
+@property --wheelBlurColor {
+    syntax: '<color>';
+    initial-value: #375FAA;
+    inherits: false;
+}
+
+@property --rouletteBlurColor {
+    syntax: '<color>';
+    initial-value: #375FAA;
+    inherits: false;
+}
+
+
+
+#wheelImage {
+    right: -200px;
+    bottom: -350px;
+    rotate: -15deg;
+    width: 550px;
+}
+
+#wheelCard:hover #wheelImage {
+    right: -150px;
+    bottom: -300px;
+}
+
+#wheelCard .gameCardBlur {
+    transition: --wheelBlurColor 0.5s ease;
+}
+
+#wheelCard:hover .gameCardBlur {
+    --wheelBlurColor: #375FAA88;
+}
+
+#rouletteImage {
+    right: -200px;
+    bottom: -350px;
+    rotate: -15deg;
+    width: 550px;
+}
+
+#rouletteCard:hover #rouletteImage {
+    right: -150px;
+    bottom: -300px;
+}
+
+#rouletteCard .gameCardBlur {
+    transition: --rouletteBlurColor 0.5s ease;
+}
+
+#rouletteCard:hover .gameCardBlur {
+    --rouletteBlurColor: #375FAA88;
+}
+
+
+
+.gameCard {
+    min-width: 400px;
+    height: 300px;
+    padding: 0;
+    flex-grow: 1;
+    border: solid 2px #FFFFFF44;
+    border-radius: 24px;
+    position: relative;
+    contain: paint;
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
+.gameCard:hover {
+    border-color: white;
+}
+
+
+
+
+.gameCardTitle {
+    margin-top: 20px;
+    margin-left: 20px;
+    position: absolute;
+    top: 0;
+    transition: all 0.5s ease;
+}
+
+.gameCard:hover .gameCardTitle {
+    font-size: 2.5em;
+}
+
+
+
+
+.gameCardImage {
+    position: absolute;
+    z-index: -1;
+    transition: all 0.5s ease;
+}
+
+
+
+
+.gameCardBlur {
+    height: 100%;
+    border-radius: 24px;
+}
