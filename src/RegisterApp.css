@@ -9,6 +9,8 @@
     z-index: 0;
 }
 
+
+
 .bgCircle {
     position: absolute;
     background: radial-gradient(#408CFF, #823891 70%);
@@ -17,19 +19,19 @@
     z-index: -1;
 }
 
-.bgCircle.little {
+.little {
     width: 10dvw;
     height: 10dvw;
     animation: bgCircleAnim 7s infinite;
 }
 
-.bgCircle.medium {
+.medium {
     width: 15dvw;
     height: 15dvw;
     animation: bgCircleAnim 9s infinite;   
 }
 
-.bgCircle.large {
+.large {
     width: 20dvw;
     height: 20dvw;
     animation: bgCircleAnim 11s infinite;

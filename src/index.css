@@ -16,6 +16,7 @@
 }
 
 /* Media */
+
 @media (max-width: 600px) {
     #header {
         height: max(60px, 13dvw) !important;
@@ -40,7 +41,7 @@ body {
 h1 {
     /* Bold 32px */
     margin: 0;
-    height: fit-content;
+    width: fit-content;
     font-family: montserratBold;
     font-size: 2em;
     color: white;
@@ -50,7 +51,7 @@ h1 {
 h2 {
     /* SemiBold 32px */
     margin: 0;
-    height: fit-content;
+    width: fit-content;
     font-family: montserratSemiBold;
     font-size: 2em;
     color: white;
@@ -60,7 +61,7 @@ h2 {
 h3 {
     /* Medium 32px */
     margin: 0;
-    height: fit-content;
+    width: fit-content;
     font-family: montserratMedium;
     font-size: 2em;
     color: white;
@@ -70,7 +71,7 @@ h3 {
 h4 {
     /* Bold 16px */
     margin: 0;
-    height: fit-content;
+    width: fit-content;
     font-family: montserratBold;
     font-size: 1em;
     color: white;
@@ -80,7 +81,7 @@ h4 {
 h5 {
     /* SemiBold 16px */
     margin: 0;
-    height: fit-content;
+    width: fit-content;
     font-family: montserratSemiBold;
     font-size: 1em;
     color: white;
@@ -90,7 +91,7 @@ h5 {
 h6 {
     /* Medium 16px */
     margin: 0;
-    height: fit-content;
+    width: fit-content;
     font-family: montserratMedium;
     font-size: 1em;
     color: white;
@@ -110,12 +111,15 @@ input {
 
 input:hover:not(:disabled) {
     border: solid 2px #FFFFFF77;
+    cursor: pointer;
 }
 
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+/* Custom styles */
 
 .gradientText {
     background: linear-gradient(#408cff 30%, #e148ff 70%);
@@ -144,4 +148,69 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     bottom: -2px;
     background: #3eb2ff00;
     transition: all 0.25s ease;
+}
+
+/* Games */
+
+.mainGameWindow {
+    margin: 28px 0px;
+    width: 100%;
+    min-height: 580px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between; 
+    gap: 10px;
+    position: relative;
+    box-shadow: 0px 10px 20px #00000044;
+}
+
+@media (max-width: 1000px) {
+    .mainGameWindow {
+        flex-wrap: wrap;
+    }
+}
+
+.sideContainer {
+    margin: 20px;
+    min-width: 400px;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    position: relative;
+    gap: 20px;
+}
+
+@media (max-width: 1000px) {
+    .sideContainer {
+        max-width: 100%;
+    }
+}
+
+.sideSection {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    background: linear-gradient(to right, #1C1C1C, #282828);
+    border-radius: 24px;
+}
+
+.sideSection > h2 {
+    font-size: 1.5em;
+}
+
+.sideSectionFlexContainer {
+    display: flex;
+    gap: 8px;
+}
+
+.sideSection input {
+    width: calc(100% - 14px);
+    height: 46px;
+}
+
+.sideSection input.active {
+    border: solid 2px white;
 }

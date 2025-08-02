@@ -12,7 +12,7 @@ export default function Header({ page, balance }) {
     return (
         <header id='header'>
             <img
-                src='/shared-assets/images/Logo120px.png'
+                src='./shared-assets/images/Logo120px.png'
                 onClick={handleClickLogo}
                 style={{ cursor: window.location.href.endsWith('index.html') ? 'default' : 'pointer' }}
             ></img>

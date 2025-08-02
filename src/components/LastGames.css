@@ -1,0 +1,45 @@
+#lastGamesSection {
+    margin: 28px;
+    width: calc(100% - 56px);
+    position: relative;
+}
+
+#lastGamesContainer {
+    margin-top: 20px;
+    min-height: 100px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-rows: repeat(auto-fit, 100px);
+    gap: 20px;
+}
+
+@media (max-width: 500px) {
+    #lastGamesContainer {
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    }
+
+    .lastGameCard {
+        min-width: 360px;
+    }
+}
+
+.lastGameCard {
+    padding: 20px;
+    min-width: 160px;
+    max-width: 480px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 24px;
+    box-shadow: #FFFFFF20 0px 0px 20px;
+    position: relative;
+}
+
+.lastGameCardColorInfo {
+    width: 60px;
+    height: 20px;
+    border: solid 2px #FFFFFF;
+    border-radius: 8px;
+}

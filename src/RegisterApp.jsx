@@ -1,5 +1,5 @@
 import './RegisterApp.css';
-import FormContainer from './components/FormContainer';
+import FormContainer from './components/register/FormContainer';
 
 export default function App() {
     return(

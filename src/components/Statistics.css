@@ -1,0 +1,22 @@
+#statisticsSection {
+    margin: 28px;
+    width: calc(100% - 56px);
+}
+
+#statisticsContainer {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-rows: repeat(auto-fit, 40px);
+    gap: 20px;
+}
+
+.statisticsBlock {
+    padding: 10px;
+    min-width: 380px;
+    height: 20px;
+    display: flex;
+    justify-content: space-between;
+    background: linear-gradient(to right, #3B3B3B, #5B5B5B 50%, #3B3B3B);
+    border-radius: 12px;
+}

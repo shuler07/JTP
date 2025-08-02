@@ -12,6 +12,7 @@ export default defineConfig({
       input: {
         main: 'index.html',
         wheel: 'wheel.html',
+        roulette: 'roulette.html',
         register: 'register.html'
       }
     }

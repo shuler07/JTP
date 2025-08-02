@@ -1,0 +1,40 @@
+#spinSection {
+    display: flex;
+    justify-content: end;
+}
+
+#spinButton {
+    padding: 16px 32px;
+    color: white;
+    font-family: montserratBold;
+    font-size: 1em;
+    font-weight: normal;
+    border: solid 2px #bbbbbb;
+    border-radius: 24px;
+    box-shadow: 0px 0px 20px #FFFFFF40;
+    transition: all 0.5s ease;
+}
+
+#spinButton:hover:not(:disabled) {
+    scale: 1.05;
+    border: solid 2px white;
+    cursor: pointer;
+}
+
+#spinButton:disabled {
+    scale: 0.95;
+    border: solid 2px #555555;
+    background: #666666;
+    box-shadow: none;
+    transition: scale 0.5s ease;
+}
+
+#spinButton h2 {
+    font-size: 0.75em;
+}
+
+
+
+.Wheel { background: linear-gradient(to right, #4C9AFF, #E148FF); }
+
+.Roulette { background: linear-gradient(to right, #50B85F, #3B9C96); }

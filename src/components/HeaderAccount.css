@@ -47,8 +47,6 @@
     background: none;
 }
 
-
-
 #headerAccountImage {
     margin: 5px;
     height: calc(100% - 10px);
@@ -66,8 +64,6 @@
 #headerAccountContainer.signedIn:hover #headerAccountImage {
     scale: 0.95;
 }
-
-
 
 #headerAccountBalance {
     margin: 0px 20px;
@@ -89,8 +85,6 @@
 #headerAccountContainer.notSignedIn:hover #headerAccountBalance {
     -webkit-text-fill-color: white;
 }
-
-
 
 #headerAccountArrow {
     margin-left: -10px;

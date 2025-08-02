@@ -3,8 +3,13 @@
     align-items: center;
 }
 
+#headerInfoContainer > h1 {
+    cursor: default;
+}
+
 #headerInfoImage {
     margin-left: 10px;
+    height: 24px;
 }
 
 #headerInfoImage:hover + #headerInfoPopup {

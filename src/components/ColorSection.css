@@ -1,0 +1,41 @@
+.colorButton {
+    flex-grow: 1;
+    padding: 0px;
+    height: 50px;
+    border: solid 2px #222222;
+    border-radius: 12px;
+    font-family: montserratMedium;
+    font-size: 1em;
+    color: white;
+    font-weight: normal;
+    transition: all 0.5s ease;
+}
+
+.colorButton:hover:not(:disabled) {
+    scale: 1.05;
+    border: solid 2px #FFFFFF77;
+    cursor: pointer;
+}
+
+.colorButton:disabled {
+    scale: 1;
+    border: solid 2px #00000077;
+}
+
+.colorButton.active {
+    scale: 0.95;
+    border: solid 2px white;
+}
+
+
+
+#buttonRed { background: #FF4B4B; }
+#buttonRed:disabled { background: #ff4b4baa; }
+#buttonBlack { background: #4A4A4A; }
+#buttonBlack:disabled { background: #4A4A4Aaa; }
+#buttonYellow { background: #DEC84A; }
+#buttonYellow:disabled { background: #DEC84Aaa; }
+#buttonGreen { background: #56D86A; }
+#buttonGreen:disabled { background: #56D86Aaa; }
+#buttonPurple { background: #B356D8; }
+#buttonPurple:disabled { background: #B356D8aa; }

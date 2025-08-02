@@ -1,0 +1,29 @@
+#historySection {
+    padding: 10px;
+}
+
+#historyFlexContainer {
+    overflow-x: scroll;
+    scrollbar-width: none;
+    border-radius: 14px;
+    cursor: grab;
+}
+
+.dragging {
+    cursor: grabbing !important;
+}
+
+.historyElement {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    flex-shrink: 0;
+}
+
+
+
+.Red { background: #FF4B4B; }
+.Black { background: #4A4A4A; }
+.Yellow { background: #DEC84A; }
+.Green { background: #56D86A; }
+.Purple { background: #B356D8; }

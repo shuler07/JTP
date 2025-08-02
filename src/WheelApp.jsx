@@ -1,25 +1,38 @@
-import './WheelApp.css';
 import Header from './components/Header';
-import WheelMainWindow from './components/WheelMainWindow';
-import WheelBetWindow from './components/WheelBetWindow';
-import WheelHistoryWindow from './components/WheelHistoryWindow';
-import WheelLastGames from './components/WheelLastGames';
-import WheelStatistics from './components/WheelStatistics';
+import WheelMainWindow from './components/wheel/WheelMainWindow';
+import LastGames from './components/LastGames';
+import Statistics from './components/Statistics';
+
+import { useEffect, useState, useRef } from 'react';
 import {
     WHEEL_HISTORY_ARRAY,
-    WHEEL_HISTORY_ARRAY_LIMIT,
     WHEEL_LAST_GAMES_ARRAY,
-    WHEEL_LAST_GAMES_ARRAY_LIMIT,
     WHEEL_STATISTICS,
+    WHEEL_STATISTICS_TEXTS,
+    WHEEL_STATISTICS_CHARS,
+    UpdateBalance,
 } from './data';
-import { useEffect, useState } from 'react';
-import { userBalance } from './data';
+import { auth, firestore } from './firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 export default function App() {
-    const [balance, setBalance] = useState(userBalance);
+    // Balance
+
+    const balanceFlag = useRef(false);
+    const [balance, setBalance] = useState(window.sessionStorage.getItem('balance'));
     useEffect(() => {
-        window.localStorage.setItem('balance', balance);
+        if (auth.currentUser && balanceFlag.current) UpdateBalance(balance);
     }, [balance]);
+
+    async function GetBalance() {
+        const snapshot = await getDoc(doc(firestore, 'users', auth.currentUser.uid));
+        setBalance(snapshot.data().balance);
+        balanceFlag.current = true;
+    }
+
+    if (auth.currentUser && !balanceFlag.current) GetBalance();
+
+    // Spin info / Disabled buttons
 
     const [spinInfo, setSpinInfo] = useState({
         bet: 0,
@@ -27,47 +40,50 @@ export default function App() {
     });
     const [isDisabled, setIsDisabled] = useState(false);
 
-    const [wheelHistoryArray, setWheelHistoryArray] = useState(WHEEL_HISTORY_ARRAY);
-    useEffect(() => {
-        window.localStorage.setItem('WHEEL_HISTORY_ARRAY', JSON.stringify(wheelHistoryArray));
-    }, [wheelHistoryArray]);
-    
-    const [wheelLastGamesArray, setWheelLastGamesArray] = useState(WHEEL_LAST_GAMES_ARRAY);
-    useEffect(() => {
-        window.localStorage.setItem('WHEEL_LAST_GAMES_ARRAY', JSON.stringify(wheelLastGamesArray));
-    }, [wheelLastGamesArray]);
+    // History, Last games, Statistics
 
-    const [wheelStatistics, setWheelStatistics] = useState(WHEEL_STATISTICS);
+    const [historyArray, setHistoryArray] = useState(WHEEL_HISTORY_ARRAY);
     useEffect(() => {
-        window.localStorage.setItem('WHEEL_STATISTICS', JSON.stringify(wheelStatistics));
-    }, [wheelStatistics]);
+        window.localStorage.setItem('WHEEL_HISTORY_ARRAY', JSON.stringify(historyArray));
+    }, [historyArray]);
+
+    const [lastGamesArray, setLastGamesArray] = useState(WHEEL_LAST_GAMES_ARRAY);
+    useEffect(() => {
+        window.localStorage.setItem('WHEEL_LAST_GAMES_ARRAY', JSON.stringify(lastGamesArray));
+    }, [lastGamesArray]);
+
+    const [statistics, setStatistics] = useState(WHEEL_STATISTICS);
+    useEffect(() => {
+        window.localStorage.setItem('WHEEL_STATISTICS', JSON.stringify(statistics));
+    }, [statistics]);
 
     return (
         <>
             <Header page='Wheel' balance={balance} />
             <main>
-                <section id='wheelSection'>
-                    <WheelMainWindow
-                        balance={balance}
-                        setBalance={setBalance}
-                        spinInfo={spinInfo}
-                        isDisabled={isDisabled}
-                        setIsDisabled={setIsDisabled}
-                        setWheelHistoryArray={setWheelHistoryArray}
-                        setWheelLastGamesArray={setWheelLastGamesArray}
-                        setWheelStatistics={setWheelStatistics}
-                    />
-                    <div id='wheelSideWindows'>
-                        <WheelBetWindow
-                            spinInfo={spinInfo}
-                            setSpinInfo={setSpinInfo}
-                            isDisabled={isDisabled}
-                        />
-                        <WheelHistoryWindow wheelHistoryArray={wheelHistoryArray} />
-                    </div>
-                </section>
-                <WheelLastGames wheelLastGamesArray={wheelLastGamesArray} />
-                <WheelStatistics wheelStatistics={wheelStatistics} />
+                <WheelMainWindow
+                    balance={balance}
+                    setBalance={setBalance}
+
+                    spinInfo={spinInfo}
+                    setSpinInfo={setSpinInfo}
+
+                    isDisabled={isDisabled}
+                    setIsDisabled={setIsDisabled}
+
+                    historyArray={historyArray}
+                    setHistoryArray={setHistoryArray}
+
+                    setLastGamesArray={setLastGamesArray}
+
+                    setStatistics={setStatistics}
+                />
+                <LastGames lastGamesArray={lastGamesArray} />
+                <Statistics
+                    statistics={statistics}
+                    statisticsTexts={WHEEL_STATISTICS_TEXTS}
+                    statisticsChars={WHEEL_STATISTICS_CHARS}
+                />
             </main>
         </>
     );

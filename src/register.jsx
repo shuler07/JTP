@@ -6,11 +6,14 @@ import App from './RegisterApp';
 import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
+const rootElement = document.getElementById('root');
+let root;
+
 onAuthStateChanged(auth, (user) => {
-    if (user) {
-        window.location.href = 'index.html';
-    } else {
-        createRoot(document.getElementById('root')).render(
+    if (!user?.emailVerified) {
+        if (rootElement.childElementCount == 0) root = createRoot(rootElement);
+        
+        root.render(
             <StrictMode>
                 <App />
             </StrictMode>

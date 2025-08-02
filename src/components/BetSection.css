@@ -1,0 +1,30 @@
+.betButton {
+    flex-grow: 1;
+    padding: 0;
+    height: 50px;
+    background: #3A76D0;
+    border: solid 2px #222222;
+    border-radius: 12px;
+    font-family: montserratMedium;
+    font-size: 1em;
+    color: white;
+    font-weight: normal;
+    transition: all 0.5s ease;
+}
+
+.betButton:hover:not(:disabled) {
+    scale: 1.05;
+    border: solid 2px #FFFFFF77;
+    cursor: pointer;
+}
+
+.betButton:disabled {
+    scale: 1;
+    background: #3A76D0bb;
+    border: solid 2px #00000077
+}
+
+.betButton.active {
+    scale: 0.95;
+    border: solid 2px white;
+}
