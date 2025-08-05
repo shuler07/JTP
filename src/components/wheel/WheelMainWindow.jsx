@@ -2,7 +2,7 @@ import WheelMainContainer from './WheelMainContainer';
 import WheelSideContainer from './WheelSideContainer';
 import ResultContainer from '../ResultContainer';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { WHEEL_KOAF_VALUES, WHEEL_HISTORY_ARRAY_LIMIT, WHEEL_LAST_GAMES_ARRAY_LIMIT } from '../../data';
 
 export default function WheelMainWindow({
@@ -187,17 +187,21 @@ export default function WheelMainWindow({
         }
     }
 
+    const MemoizedWheelSideContainer = useMemo(() => (
+        <WheelSideContainer
+            balance={balance}
+            spinInfo={spinInfo}
+            setSpinInfo={setSpinInfo}
+            isDisabled={isDisabled}
+            StartEvent={StartWheelSpin}
+            historyArray={historyArray}
+        />
+    ), [balance, spinInfo, isDisabled, historyArray]);
+
     return (
         <div className='mainGameWindow' style={{ background: 'linear-gradient(to right, #4C9AFF, #9137BB)' }}>
             <WheelMainContainer wheelAngle={wheelAngle} />
-            <WheelSideContainer
-                balance={balance}
-                spinInfo={spinInfo}
-                setSpinInfo={setSpinInfo}
-                isDisabled={isDisabled}
-                StartEvent={StartWheelSpin}
-                historyArray={historyArray}
-            />
+            {MemoizedWheelSideContainer}
             <ResultContainer />
         </div>
     );

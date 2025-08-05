@@ -15,7 +15,7 @@ export default function LastGames({ lastGamesArray }) {
                         color: 'gray',
                     }}
                 >
-                    It seems there is nothing...
+                    It seems here is nothing...
                 </h6>
             );
         }
@@ -42,7 +42,7 @@ export default function LastGames({ lastGamesArray }) {
                     ></div>
                 </div>
                 <img
-                    src='./shared-assets/images/ArrowSign.png'
+                    src='/JTP/shared-assets/images/ArrowSign.png'
                     style={{ height: '40px' }}
                 />
                 <div>

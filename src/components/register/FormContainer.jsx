@@ -1,6 +1,8 @@
 import './FormContainer.css';
 
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import { auth, firestore } from '../../firebase';
 import {
     createUserWithEmailAndPassword,
@@ -43,18 +45,43 @@ export default function FormContainer() {
         }
     }
 
-    function handleClickLogo() {
-        if (!window.location.href.endsWith('index.html')) {
-            window.location.href = 'index.html';
-        }
-    }
+    // Memo
+
+    const MemoizedLogo = memo(() => (
+        <div style={{ position: 'relative', cursor: 'pointer' }}>
+            <img src='/JTP/shared-assets/images/Logo180px.png'></img>
+            <Link to='/' style={{ position: 'absolute', left: '0', width: '100%', height: '100%' }} />
+        </div>
+    ));
+
+    const MemoizedFormFieldEmail = useMemo(
+        () => <FormField hint='Email' type='email' value={emailText} setValue={setEmailText} />,
+        [emailText]
+    );
+    const MemoizedFormFieldPassword = useMemo(
+        () => <FormField hint='Password' type='password' value={passwordText} setValue={setPasswordText} />,
+        [passwordText]
+    );
+    const MemoizedFormFieldUsername = useMemo(
+        () => <FormField hint='Username' value={usernameText} setValue={setUsernameText} />,
+        [usernameText]
+    );
+
+    const MemoizedFormButtonSwitch = useMemo(
+        () => <FormButtonSwitch isRegister={isRegister} setIsRegister={setIsRegister} />,
+        [isRegister]
+    );
+    const MemoizedFormButtonReset = useMemo(
+        () => <FormButtonReset email={emailText} setAlert={setAlert} animateAlert={AnimateAlert} />,
+        [isRegister]
+    );
 
     return (
         <div id='formContainer'>
-            <img src='./shared-assets/images/Logo180px.png' onClick={handleClickLogo} style={{ cursor: 'pointer' }}></img>
-            <FormField hint='Email' type='email' value={emailText} setValue={setEmailText} />
-            <FormField hint='Password' type='password' value={passwordText} setValue={setPasswordText} />
-            {isRegister && <FormField hint='Username' value={usernameText} setValue={setUsernameText} />}
+            <MemoizedLogo />
+            {MemoizedFormFieldEmail}
+            {MemoizedFormFieldPassword}
+            {isRegister && MemoizedFormFieldUsername}
             <FormButton
                 setAlert={setAlert}
                 animateAlert={AnimateAlert}
@@ -63,8 +90,8 @@ export default function FormContainer() {
                 _password={passwordText}
                 _username={usernameText}
             />
-            <FormButtonSwitch isRegister={isRegister} setIsRegister={setIsRegister} />
-            {!isRegister && <FormButtonReset email={emailText} setAlert={setAlert} animateAlert={AnimateAlert} />}
+            {MemoizedFormButtonSwitch}
+            {!isRegister && MemoizedFormButtonReset}
             <FormAlert reference={formAlert} alert={alert} />
         </div>
     );
@@ -128,15 +155,45 @@ function FormButton({ setAlert, animateAlert, isRegister, _email, _password, _us
                     if (data) {
                         window.localStorage.setItem('username', data.username);
                         alert = '';
-                        window.location.href = 'index.html';
+                        window.location.pathname = '/JTP/';
                     } else {
                         try {
                             await setDoc(doc(firestore, 'users', user.uid), {
                                 username: window.localStorage.getItem('username'),
                                 balance: 0,
+                                wheelStatistics: [
+                                    0, // totalSpins
+                                    0, // totalWins
+                                    0, // totalMoneyBet
+                                    0, // totalMoneyWon
+                                    0, // winPercentage
+                                    0, // moneyProfit
+                                    0, // redChoosed
+                                    0, // redWon
+                                    0, // blackChoosed
+                                    0, // blackWon
+                                    0, // yellowChoosed
+                                    0, // yellowWon
+                                    0, // greenChoosed
+                                    0, // greenWon
+                                ],
+                                rouletteStatistics: [
+                                    0, // totalSpins
+                                    0, // totalWins
+                                    0, // totalMoneyBet
+                                    0, // totalMoneyWon
+                                    0, // winPercentage
+                                    0, // moneyProfit
+                                    0, // redChoosed
+                                    0, // redWon
+                                    0, // blackChoosed
+                                    0, // blackWon
+                                    0, // purpleChoosed
+                                    0, // purpleWon
+                                ],
                             });
                             alert = '';
-                            window.location.href = 'index.html';
+                            window.location.pathname = '/JTP/';
                         } catch (error) {
                             console.log(error.message);
                         }
@@ -163,6 +220,7 @@ function FormButton({ setAlert, animateAlert, isRegister, _email, _password, _us
 
     function ValidateCredential(_email, _password) {
         const _passwordSet = new Set(_password);
+        console.log(_password.length);
 
         if (_password.length < 8) return 'Short password';
         if (_passwordSet.size <= _password.length / 3) return 'Too many repeating symbols';
@@ -191,7 +249,9 @@ function FormButtonSwitch({ isRegister, setIsRegister }) {
 }
 
 function FormButtonReset({ email, setAlert, animateAlert }) {
-    function handleClickReset() { TryToReset(); }
+    function handleClickReset() {
+        TryToReset();
+    }
 
     async function TryToReset(alert = 'Invalid email or password. Try again later') {
         if (email == '') {

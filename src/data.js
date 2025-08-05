@@ -1,12 +1,12 @@
 import { auth, firestore } from "./firebase";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 export async function UpdateBalance(balance) {
+    if (!auth.currentUser) return;
     try {
-        await updateDoc(doc(firestore, 'users', auth.currentUser.uid), {
+        updateDoc(doc(firestore, 'users', auth.currentUser.uid), {
             balance: balance
-        })
-        window.sessionStorage.setItem('balance', balance);
+        });
     } catch (error) {
         console.log(error.message);
     }
@@ -22,17 +22,17 @@ export const GAME_CARDS_DATA = {
         id: 'wheelCard',
         background: 'linear-gradient(to right bottom, #4C9AFF, #9137BB)',
         blurBackground: 'linear-gradient(to right bottom, #4C9AFF00, var(--wheelBlurColor))',
-        image: './shared-assets/images/Wheel.png',
+        image: `/JTP/shared-assets/images/Wheel.png`,
         imageId: 'wheelImage',
-        navigateTo: 'wheel.html'
+        navigateTo: '/wheel'
     },
     Roulette: {
         id: 'rouletteCard',
         background: 'linear-gradient(to right bottom, #50B85F, #3B9C96)',
         blurBackground: 'linear-gradient(to right bottom, #50B85F00, var(--rouletteBlurColor))',
-        image: './shared-assets/images/Roulette.png',
+        image: `/JTP/shared-assets/images/Roulette.png`,
         imageId: 'rouletteImage',
-        navigateTo: 'roulette.html'
+        navigateTo: '/roulette'
     }
 };
 
@@ -69,41 +69,87 @@ export const ATTR_BY_COLOR_VALUES = {
 
 
 
-let _wheel_history_array = window.localStorage.getItem('WHEEL_HISTORY_ARRAY');
-export const WHEEL_HISTORY_ARRAY = _wheel_history_array != null ? JSON.parse(_wheel_history_array) : [];
-export const WHEEL_HISTORY_ARRAY_LIMIT = 24;
+export function GetWheelHistoryArray() {
+    let _wheel_history_array = window.localStorage.getItem('WHEEL_HISTORY_ARRAY');
+    return _wheel_history_array != null ? JSON.parse(_wheel_history_array) : []
+}
+export const WHEEL_HISTORY_ARRAY_LIMIT = 40;
 
-let _wheel_last_games_array = window.localStorage.getItem('WHEEL_LAST_GAMES_ARRAY');
-export const WHEEL_LAST_GAMES_ARRAY = _wheel_last_games_array != null ? JSON.parse(_wheel_last_games_array) : [];
+export function GetWheelLastGamesArray() {
+    let _wheel_last_games_array = window.localStorage.getItem('WHEEL_LAST_GAMES_ARRAY');
+    return _wheel_last_games_array != null ? JSON.parse(_wheel_last_games_array) : [];
+}
 export const WHEEL_LAST_GAMES_ARRAY_LIMIT = 24;
 
-let _roulette_history_array = window.localStorage.getItem('ROULETTE_HISTORY_ARRAY');
-export const ROULETTE_HISTORY_ARRAY = _roulette_history_array != null ? JSON.parse(_roulette_history_array) : [];
-export const ROULETTE_HISTORY_ARRAY_LIMIT = 24;
+export function GetRouletteHistoryArray() {
+    let _roulette_history_array = window.localStorage.getItem('ROULETTE_HISTORY_ARRAY');
+    return _roulette_history_array != null ? JSON.parse(_roulette_history_array) : [];
+}
+export const ROULETTE_HISTORY_ARRAY_LIMIT = 40;
 
-let _roulette_last_games_array = window.localStorage.getItem('ROULETTE_LAST_GAMES_ARRAY');
-export const ROULETTE_LAST_GAMES_ARRAY = _roulette_last_games_array != null ? JSON.parse(_roulette_last_games_array) : [];
+export function GetRouletteLastGamesArray() {
+    let _roulette_last_games_array = window.localStorage.getItem('ROULETTE_LAST_GAMES_ARRAY');
+    return _roulette_last_games_array != null ? JSON.parse(_roulette_last_games_array) : [];
+}
 export const ROULETTE_LAST_GAMES_ARRAY_LIMIT = 24;
 
 
+function WheelStatsToObject(array) {    
+    return {
+        totalSpins: array[0],
+        totalWins: array[1],
+        totalMoneyBet: array[2],
+        totalMoneyWon: array[3],
+        winPercentage: array[4],
+        moneyProfit: array[5],
+        redChoosed: array[6],
+        redWon: array[7],
+        blackChoosed: array[8],
+        blackWon: array[9],
+        yellowChoosed: array[10],
+        yellowWon: array[11],
+        greenChoosed: array[12],
+        greenWon: array[13]
+    };
+}
 
-let _wheel_statistics = window.localStorage.getItem('WHEEL_STATISTICS');
-export const WHEEL_STATISTICS = _wheel_statistics != null ? JSON.parse(_wheel_statistics) : {
-    totalSpins: 0,
-    totalWins: 0,
-    totalMoneyBet: 0,
-    totalMoneyWon: 0,
-    winPercentage: 0,
-    moneyProfit: 0,
-    redChoosed: 0,
-    redWon: 0,
-    blackChoosed: 0,
-    blackWon: 0,
-    yellowChoosed: 0,
-    yellowWon: 0,
-    greenChoosed: 0,
-    greenWon: 0
-};
+function WheelStatsToArray(obj) {    
+    return [
+        obj.totalSpins || 0,
+        obj.totalWins || 0,
+        obj.totalMoneyBet || 0,
+        obj.totalMoneyWon || 0,
+        obj.winPercentage || 0,
+        obj.moneyProfit || 0,
+        obj.redChoosed || 0,
+        obj.redWon || 0,
+        obj.blackChoosed || 0,
+        obj.blackWon || 0,
+        obj.yellowChoosed || 0,
+        obj.yellowWon || 0,
+        obj.greenChoosed || 0,
+        obj.greenWon || 0
+    ];
+}
+
+export async function GetWheelStatistics() {
+    try {
+        const snapshot = await getDoc(doc(firestore, 'users', auth.currentUser.uid));
+        const wheelStatistics = snapshot.data().wheelStatistics;
+        return WheelStatsToObject(wheelStatistics);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+export async function UpdateWheelStatistics(stats) {
+    try {
+        const statsArray = WheelStatsToArray(stats);
+        updateDoc(doc(firestore, 'users', auth.currentUser.uid), { wheelStatistics: statsArray });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 export const WHEEL_STATISTICS_TEXTS = [
     'Total spins',
@@ -124,21 +170,60 @@ export const WHEEL_STATISTICS_TEXTS = [
 
 export const WHEEL_STATISTICS_CHARS = [ '', '', '$', '$', '%', '$', '', '', '', '', '', '', '', '' ];
 
-let _roulette_statistics = window.localStorage.getItem('ROULETTE_STATISTICS');
-export const ROULETTE_STATISTICS = _roulette_statistics != null ? JSON.parse(_roulette_statistics) : {
-    totalSpins: 0,
-    totalWins: 0,
-    totalMoneyBet: 0,
-    totalMoneyWon: 0,
-    winPercentage: 0,
-    moneyProfit: 0,
-    redChoosed: 0,
-    redWon: 0,
-    blackChoosed: 0,
-    blackWon: 0,
-    purpleChoosed: 0,
-    purpleWon: 0
-};
+
+
+function RouletteStatsToObject(array) {
+    return {
+        totalSpins: array[0],
+        totalWins: array[1],
+        totalMoneyBet: array[2],
+        totalMoneyWon: array[3],
+        winPercentage: array[4],
+        moneyProfit: array[5],
+        redChoosed: array[6],
+        redWon: array[7],
+        blackChoosed: array[8],
+        blackWon: array[9],
+        purpleChoosed: array[10],
+        purpleWon: array[11]
+    };
+}
+
+function RouletteStatsToArray(obj) {
+     return [
+        obj.totalSpins || 0,
+        obj.totalWins || 0,
+        obj.totalMoneyBet || 0,
+        obj.totalMoneyWon || 0,
+        obj.winPercentage || 0,
+        obj.moneyProfit || 0,
+        obj.redChoosed || 0,
+        obj.redWon || 0,
+        obj.blackChoosed || 0,
+        obj.blackWon || 0,
+        obj.purpleChoosed || 0,
+        obj.purpleWon || 0
+    ];
+}
+
+export async function GetRouletteStatistics() {
+    try {
+        const snapshot = await getDoc(doc(firestore, 'users', auth.currentUser.uid));
+        const rouletteStatistics = snapshot.data().rouletteStatistics;
+        return RouletteStatsToObject(rouletteStatistics);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+export async function UpdateRouletteStatistics(stats) {
+    try {
+        const statsArray = RouletteStatsToArray(stats);
+        updateDoc(doc(firestore, 'users', auth.currentUser.uid), { rouletteStatistics: statsArray });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 export const ROULETTE_STATISTICS_TEXTS = [
     'Total spins',
@@ -156,3 +241,13 @@ export const ROULETTE_STATISTICS_TEXTS = [
 ];
 
 export const ROULETTE_STATISTICS_CHARS = [ '', '', '$', '$', '%', '$', '', '', '', '', '', '' ];
+
+
+
+export const SIDEBAR_TEXTS = [
+    'Profile',
+    'Statistics',
+    'Account',
+    'Appearance',
+    'Language'
+];

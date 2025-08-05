@@ -1,23 +1,19 @@
 import './Header.css';
+
+import { Link } from 'react-router-dom';
+
 import HeaderInfo from './HeaderInfo';
 import HeaderAccount from './HeaderAccount';
 
 export default function Header({ page, balance }) {
-    function handleClickLogo() {
-        if (!window.location.href.endsWith('index.html')) {
-            window.location.href = 'index.html';
-        }
-    }
-
     return (
         <header id='header'>
-            <img
-                src='./shared-assets/images/Logo120px.png'
-                onClick={handleClickLogo}
-                style={{ cursor: window.location.href.endsWith('index.html') ? 'default' : 'pointer' }}
-            ></img>
+            <div style={{ position: 'relative', cursor: page == 'Main page' ? 'default' : 'pointer', height: '100%' }}>
+                <img src='/JTP/shared-assets/images/Logo120px.png' />
+                {page !== 'Main page' && <Link to='' style={{ position: 'absolute', left: '0', width: '100%', height: '100%' }} /> }
+            </div>
             <HeaderInfo page={page} />
-            <HeaderAccount balance={balance} />
+            <HeaderAccount page={page} balance={balance} />
         </header>
     );
 }

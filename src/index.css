@@ -30,12 +30,11 @@
 /* Standart tags */
 
 #root {
-    min-height: 100dvh;
+    position: relative;
 }
 
 body {
     margin: 0;
-    background: linear-gradient(to bottom, #1a1a1a, #2c2c2c);
 }
 
 h1 {

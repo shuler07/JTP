@@ -2,7 +2,7 @@ import RouletteMainContainer from './RouletteMainContainer';
 import RouletteSideContainer from './RouletteSideContainer';
 import ResultContainer from '../ResultContainer';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { ROULETTE_KOAF_VALUES, ROULETTE_HISTORY_ARRAY_LIMIT, ROULETTE_LAST_GAMES_ARRAY_LIMIT } from '../../data';
 
 export default function RouletteMainWindow({
@@ -218,17 +218,23 @@ export default function RouletteMainWindow({
         }
     }
 
+    // Memo
+
+    const MemoizedRouletteSideContainer = useMemo(() => (
+        <RouletteSideContainer
+            balance={balance}
+            spinInfo={spinInfo}
+            setSpinInfo={setSpinInfo}
+            isDisabled={isDisabled}
+            StartEvent={StartRouletteSpin}
+            historyArray={historyArray}
+        />
+    ), [balance, spinInfo, isDisabled, historyArray]);
+
     return (
         <div className='mainGameWindow' style={{ background: 'linear-gradient(to right, #50B85F, #3B9C96)' }}>
             <RouletteMainContainer reference={mainContainer} left1={left1} left2={left2} />
-            <RouletteSideContainer
-                balance={balance}
-                spinInfo={spinInfo}
-                setSpinInfo={setSpinInfo}
-                isDisabled={isDisabled}
-                StartEvent={StartRouletteSpin}
-                historyArray={historyArray}
-            />
+            {MemoizedRouletteSideContainer}
             <ResultContainer />
         </div>
     );

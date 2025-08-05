@@ -1,0 +1,28 @@
+#gamesSection {
+    margin: 28px;
+}
+
+#gamesSection > h1 {
+    position: relative;
+    cursor: default;
+}
+
+#gamesSection > h1::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    left: 0;
+    bottom: -2px;
+    background: linear-gradient(to right, #408cff, #e148ff);
+    border-radius: 2px;
+}
+
+
+
+#gamesContainer {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+}

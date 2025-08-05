@@ -16,7 +16,7 @@ export default function HistorySection({ historyArray }) {
                         color: 'gray',
                     }}
                 >
-                    It seems there is nothing...
+                    It seems here is nothing...
                 </h6>
             );
         }

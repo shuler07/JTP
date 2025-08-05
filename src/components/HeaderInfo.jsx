@@ -8,7 +8,7 @@ export default function HeaderInfo({ page }) {
     function GetInfoImage() {
         if (popup == undefined) return;
         return (
-            <img id='headerInfoImage' src='./shared-assets/images/InfoIcon.png'></img>
+            <img id='headerInfoImage' src='/JTP/shared-assets/images/InfoIcon.png'></img>
         );
     };
 

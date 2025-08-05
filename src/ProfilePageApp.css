@@ -1,0 +1,44 @@
+#profileMainContainer {
+    position: relative;
+    display: flex;
+    gap: 28px;
+    justify-content: center;
+}
+
+#sideDivHelper {
+    width: 240px;
+}
+
+@media (max-width: 1200px) {
+    #sideDivHelper {
+        min-width: 0px;
+        width: calc(100% - (1200px - 250px));
+    }
+}
+
+@media (max-width: 960px) {
+    #sideDivHelper {
+        display: none;
+    }
+}
+
+#sidebarButton {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    background: white;
+    border-radius: 12px;
+    display: none;
+}
+
+@media (max-width: 800px) {
+    #profileMainContainer {
+        gap: 0px
+    }
+
+    #sidebarButton {
+        display: block;
+    }
+}
