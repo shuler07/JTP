@@ -43,7 +43,7 @@ export default function RoulettePageApp() {
     }, [lastGamesArray]);
 
     const isStatsLoaded = useRef(false);
-    const [statistics, setStatistics] = useState({});
+    const [statistics, setStatistics] = useState([]);
     useEffect(() => {
         if (isStatsLoaded.current) UpdateRouletteStatistics(statistics);
     }, [statistics]);
@@ -76,6 +76,7 @@ export default function RoulettePageApp() {
                 setHistoryArray={setHistoryArray}
                 setLastGamesArray={setLastGamesArray}
                 setStatistics={setStatistics}
+                setOverallStatistics={context.setOverallStatistics}
             />
             <MemoizedLastGames />
             <MemoizedStatistics />

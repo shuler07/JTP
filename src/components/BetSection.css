@@ -1,12 +1,12 @@
 .betButton {
     flex-grow: 1;
     padding: 0;
-    height: 50px;
+    height: min(3.5rem, 50px);
     background: #3A76D0;
     border: solid 2px #222222;
     border-radius: 12px;
     font-family: montserratMedium;
-    font-size: 1em;
+    font-size: 1rem;
     color: white;
     font-weight: normal;
     transition: all 0.5s ease;

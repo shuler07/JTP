@@ -29,9 +29,9 @@ export default function LastGames({ lastGamesArray }) {
                     <h6
                         style={{
                             width: '100%',
-                            height: '40px',
+                            height: '2.5rem',
                             textAlign: 'center',
-                            lineHeight: '40px',
+                            lineHeight: '2.5rem',
                         }}
                     >
                         {game.betBefore} $
@@ -42,16 +42,16 @@ export default function LastGames({ lastGamesArray }) {
                     ></div>
                 </div>
                 <img
-                    src='/JTP/shared-assets/images/ArrowSign.png'
-                    style={{ height: '40px' }}
+                    src='/JTP/shared-assets/images/ArrowRight.svg'
+                    style={{ width: '32px', padding: '4px' }}
                 />
                 <div>
                     <h5
                         style={{
                             width: '100%',
-                            height: '40px',
+                            height: '2.5rem',
                             textAlign: 'center',
-                            lineHeight: '40px',
+                            lineHeight: '2.5rem',
                         }}
                     >
                         {game.betAfter} $

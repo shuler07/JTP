@@ -1,23 +1,110 @@
 #profileMainWindow {
-    margin: 28px;
-    min-width: 400px;
-    width: 800px;
+    margin: 1.5rem;
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 1rem;
 }
 
 .profileSection {
-    padding: 28px;
-    width: calc(100% - 56px);
+    padding: 1.5rem;
+    width: calc(100% - 3rem);
     background: #ffffff19;
-    border-radius: 24px;
+    border-radius: 1.5rem;
     box-shadow: 0px 0px 20px #00000034;
-    backdrop-filter: blur(100px);
-    height: 400px;
+    backdrop-filter: blur(50px);
 }
 
 .profileSection > h2 {
     font-size: 1.5em;
+}
+
+#addFunds {
+    padding: 0.5rem 1rem;
+    background: #5BC762;
+    border: solid 2px #ffffff00;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+#addFunds:hover {
+    border: solid 2px #ffffff99;
+}
+
+.grayInfoField {
+    padding: 0px 1rem;
+    width: calc(100% - 2rem);
+    height: 2.5rem;
+    background: #00000032;
+    border-radius: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.grayInfoFieldRight {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.editPencil {
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.editPencil:hover {
+    scale: 1.1;
+}
+
+.dropdownChevron {
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.dropdownChevron:hover {
+    translate: 0px 2px;
+}
+
+.dropdownMenu {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 1rem;
+    border: solid 1px #ffffff55;
+    background: #202020;
+    box-shadow: 0px 0px 20px #00000032;
+    z-index: 1;
+    animation: dropdownMenuAnim 0.25s forwards;
+}
+
+@keyframes dropdownMenuAnim {
+    0% {
+        opacity: 0;
+        translate: 0px -10px;
+    }
+    100% {
+        opacity: 1;
+        translate: 0px 0px;
+    }
+}
+
+.dropdownElement {
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.dropdownElement > h6 {
+    color: #BDBDBD;
+    transition: all 0.25s ease;
+}
+
+.dropdownElement:hover > h6 {
+    color: white;
+    scale: 1.05;
 }

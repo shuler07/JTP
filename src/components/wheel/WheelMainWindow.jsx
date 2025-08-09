@@ -21,12 +21,13 @@ export default function WheelMainWindow({
     setLastGamesArray,
 
     setStatistics,
+    setOverallStatistics
 }) {
     const [wheelAngle, setWheelAngle] = useState(0);
-    const [wheelEndGame, setWheelEndGame] = useState(false);
     const wheelDirection = useRef(0);
     const wheelSpeed = useRef(0);
 
+    const [wheelEndGame, setWheelEndGame] = useState(false);
     useEffect(() => {
         if (wheelEndGame) {
             FinishWheelSpin();
@@ -163,27 +164,50 @@ export default function WheelMainWindow({
 
     function UpdateWheelStatistics(key, isWin, finalColor, moneyWon) {
         if (key == 'start') {
-            setStatistics((stats) => ({
-                ...stats,
-                totalSpins: stats.totalSpins + 1,
-                totalMoneyBet: stats.totalMoneyBet + spinInfo.bet,
-                redChoosed: stats.redChoosed + (spinInfo.color == 'Red' ? 1 : 0),
-                blackChoosed: stats.blackChoosed + (spinInfo.color == 'Black' ? 1 : 0),
-                yellowChoosed: stats.yellowChoosed + (spinInfo.color == 'Yellow' ? 1 : 0),
-                greenChoosed: stats.greenChoosed + (spinInfo.color == 'Green' ? 1 : 0),
-            }));
+            setStatistics(stats => {
+                let newStats = [...stats];
+
+                newStats[0] += 1; // totalSpins
+                newStats[2] += spinInfo.bet; // totalMoneyBet
+                if (spinInfo.color == 'Red') newStats[6] += 1; // redChoosed
+                if (spinInfo.color == 'Black') newStats[8] += 1; // blackChoosed
+                if (spinInfo.color == 'Yellow') newStats[10] += 1; // yellowChoosed
+                if (spinInfo.color == 'Green') newStats[12] += 1; // greenChoosed
+                return newStats;
+            });
+            setOverallStatistics(stats => {
+                let newStats = [...stats];
+
+                newStats[2] += spinInfo.bet; // moneyBet
+                newStats[4] = Math.round((stats[2] + spinInfo.bet) / (stats[6] + 1) * 100) / 100; // averageBet
+                newStats[6] += 1; // games
+                if (stats[10] + 1 >= stats[11]) newStats[7] = 'Wheel'; // favoriteGame
+                newStats[10] += 1; // wheelGames
+                return newStats;
+            });
         } else if (key == 'finish') {
-            setStatistics((stats) => ({
-                ...stats,
-                totalWins: stats.totalWins + (isWin ? 1 : 0),
-                totalMoneyWon: stats.totalMoneyWon + (isWin ? moneyWon : 0),
-                winPercentage: Math.round(((stats.totalWins + (isWin ? 1 : 0)) / stats.totalSpins) * 1000) / 10,
-                moneyProfit: stats.totalMoneyWon + (isWin ? moneyWon : 0) - stats.totalMoneyBet,
-                redWon: stats.redWon + (isWin && finalColor == 'Red' ? 1 : 0),
-                blackWon: stats.blackWon + (isWin && finalColor == 'Black' ? 1 : 0),
-                yellowWon: stats.yellowWon + (isWin && finalColor == 'Yellow' ? 1 : 0),
-                greenWon: stats.greenWon + (isWin && finalColor == 'Green' ? 1 : 0),
-            }));
+            setStatistics(stats => {
+                let newStats = [...stats];
+
+                if (isWin) newStats[1] += 1; // totalWins
+                if (isWin) newStats[3] += moneyWon; // totalMoneyWon
+                newStats[4] = Math.round((stats[1] + (isWin ? 1 : 0)) / stats[0] * 1000) / 10; // winPercentage
+                newStats[5] = stats[3] + (isWin ? moneyWon : 0) - stats[2]; // moneyProfit
+                if (isWin && finalColor == 'Red') newStats[7] += 1; // redWon
+                if (isWin && finalColor == 'Black') newStats[9] += 1; // blackWon
+                if (isWin && finalColor == 'Yellow') newStats[11] += 1; // yellowWon
+                if (isWin && finalColor == 'Green') newStats[13] += 1; // greenWon
+                return newStats;
+            });
+            setOverallStatistics(stats => {
+                let newStats = [...stats];
+
+                if (isWin) newStats[3] += moneyWon; // moneyWon
+                newStats[5] = Math.round((stats[3] + (isWin ? moneyWon : 0)) / stats[6] * 100) / 100; // averageWin
+                if (isWin) newStats[8] += 1; // wins
+                newStats[9] = Math.round((stats[8] + (isWin ? 1 : 0)) / stats[6] * 1000) / 10; // winPercentage
+                return newStats;
+            });
         }
     }
 

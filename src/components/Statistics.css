@@ -1,22 +1,22 @@
 #statisticsSection {
-    margin: 28px;
-    width: calc(100% - 56px);
+    margin: 1.5rem;
+    width: calc(100% - 3rem);
 }
 
 #statisticsContainer {
-    margin-top: 20px;
+    margin-top: 1rem;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    grid-template-rows: repeat(auto-fit, 40px);
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr));
+    grid-template-rows: repeat(auto-fit, 3rem);
+    gap: 1rem;
 }
 
 .statisticsBlock {
-    padding: 10px;
-    min-width: 380px;
-    height: 20px;
+    padding: 0.5rem;
+    min-width: 20rem;
+    height: 2rem;
     display: flex;
     justify-content: space-between;
     background: linear-gradient(to right, #3B3B3B, #5B5B5B 50%, #3B3B3B);
-    border-radius: 12px;
+    border-radius: 1rem;
 }

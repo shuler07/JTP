@@ -1,6 +1,17 @@
 import { auth, firestore } from "./firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 
+export const htmlElement = document.getElementsByTagName('html')[0];
+export const pxToNum = (value) => parseFloat(value.replace('px', ''));
+
+// User data
+
+let funcOnLoad;
+export function SetFuncOnLoad(func) {
+    funcOnLoad = func;
+};
+export let isUserDataLoaded = false;
+
 export async function UpdateBalance(balance) {
     if (!auth.currentUser) return;
     try {
@@ -11,6 +22,76 @@ export async function UpdateBalance(balance) {
         console.log(error.message);
     }
 }
+
+export async function UpdateOverallStatistics(stats) {
+    if (!auth.currentUser) return;
+    try {
+        updateDoc(doc(firestore, 'users', auth.currentUser.uid), {
+            overallStatistics: stats
+        });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+export let username;
+export let registerDate;
+export let registerDaysAgo;
+
+let _userSettings = window.localStorage.getItem('userSettings');
+export let userSettings = _userSettings != null ? JSON.parse(_userSettings) : {
+    theme: 'Dark',
+    fontSize: 'Medium'
+};
+
+export const updateUserSettings = (settings) => userSettings = settings;
+
+export const OVERALL_STATISTICS_TEXTS = [
+    'Money funded',
+    'Money withdrawed',
+    'Money bet',
+    'Money won',
+    'Average bet',
+    'Average win',
+    'Games',
+    'Favorite game',
+    'Wins',
+    'Win percentage',
+    'Wheel games',
+    'Roulette games'
+];
+
+export const OVERALL_STATISTICS_CHARS = [ '$', '$', '$', '$', '$', '$', '', '', '', '%', '', '' ];
+
+export async function GetUserData() {
+    function GetRegisterDaysAgo() {
+        const now = Date.now();
+        const prev = Date.parse(registerDate);
+        const dif = (now - prev) / 1000 / 60 / 60 / 24; // seconds -> minutes -> hours -> days
+
+        registerDaysAgo = parseInt(dif);
+    }
+
+    if (!auth.currentUser) {
+        isUserDataLoaded = true;
+        if (funcOnLoad) funcOnLoad(true);
+        return;
+    }
+    
+    try {
+        const snapshot = await getDoc(doc(firestore, 'users', auth.currentUser.uid));
+        const data = snapshot.data();
+
+        username = data.username;
+        registerDate = data.registerDate;
+        GetRegisterDaysAgo();
+        funcOnLoad(true);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// Header, Main page
 
 export const HEADER_POPUP_TEXTS = {
     Wheel: 'Wheel consists of 40 parts: 18 red, 18 black, 3 yellow and 1 green',
@@ -36,11 +117,11 @@ export const GAME_CARDS_DATA = {
     }
 };
 
-
+// Bet settings
 
 export let BET_VALUES = [ 1, 5, 10, 20, 50 ];
 
-
+// Color values
 
 export const WHEEL_COLOR_VALUES = [ 'Red', 'Black', 'Yellow', 'Green' ];
 
@@ -67,7 +148,7 @@ export const ATTR_BY_COLOR_VALUES = {
     Purple: 'B356D8'
 }
 
-
+// History, Last games, Statistics
 
 export function GetWheelHistoryArray() {
     let _wheel_history_array = window.localStorage.getItem('WHEEL_HISTORY_ARRAY');
@@ -93,50 +174,11 @@ export function GetRouletteLastGamesArray() {
 }
 export const ROULETTE_LAST_GAMES_ARRAY_LIMIT = 24;
 
-
-function WheelStatsToObject(array) {    
-    return {
-        totalSpins: array[0],
-        totalWins: array[1],
-        totalMoneyBet: array[2],
-        totalMoneyWon: array[3],
-        winPercentage: array[4],
-        moneyProfit: array[5],
-        redChoosed: array[6],
-        redWon: array[7],
-        blackChoosed: array[8],
-        blackWon: array[9],
-        yellowChoosed: array[10],
-        yellowWon: array[11],
-        greenChoosed: array[12],
-        greenWon: array[13]
-    };
-}
-
-function WheelStatsToArray(obj) {    
-    return [
-        obj.totalSpins || 0,
-        obj.totalWins || 0,
-        obj.totalMoneyBet || 0,
-        obj.totalMoneyWon || 0,
-        obj.winPercentage || 0,
-        obj.moneyProfit || 0,
-        obj.redChoosed || 0,
-        obj.redWon || 0,
-        obj.blackChoosed || 0,
-        obj.blackWon || 0,
-        obj.yellowChoosed || 0,
-        obj.yellowWon || 0,
-        obj.greenChoosed || 0,
-        obj.greenWon || 0
-    ];
-}
-
 export async function GetWheelStatistics() {
     try {
         const snapshot = await getDoc(doc(firestore, 'users', auth.currentUser.uid));
         const wheelStatistics = snapshot.data().wheelStatistics;
-        return WheelStatsToObject(wheelStatistics);
+        return wheelStatistics;
     } catch (error) {
         console.log(error.message);
     }
@@ -144,8 +186,7 @@ export async function GetWheelStatistics() {
 
 export async function UpdateWheelStatistics(stats) {
     try {
-        const statsArray = WheelStatsToArray(stats);
-        updateDoc(doc(firestore, 'users', auth.currentUser.uid), { wheelStatistics: statsArray });
+        updateDoc(doc(firestore, 'users', auth.currentUser.uid), { wheelStatistics: stats });
     } catch (error) {
         console.log(error.message);
     }
@@ -170,47 +211,11 @@ export const WHEEL_STATISTICS_TEXTS = [
 
 export const WHEEL_STATISTICS_CHARS = [ '', '', '$', '$', '%', '$', '', '', '', '', '', '', '', '' ];
 
-
-
-function RouletteStatsToObject(array) {
-    return {
-        totalSpins: array[0],
-        totalWins: array[1],
-        totalMoneyBet: array[2],
-        totalMoneyWon: array[3],
-        winPercentage: array[4],
-        moneyProfit: array[5],
-        redChoosed: array[6],
-        redWon: array[7],
-        blackChoosed: array[8],
-        blackWon: array[9],
-        purpleChoosed: array[10],
-        purpleWon: array[11]
-    };
-}
-
-function RouletteStatsToArray(obj) {
-     return [
-        obj.totalSpins || 0,
-        obj.totalWins || 0,
-        obj.totalMoneyBet || 0,
-        obj.totalMoneyWon || 0,
-        obj.winPercentage || 0,
-        obj.moneyProfit || 0,
-        obj.redChoosed || 0,
-        obj.redWon || 0,
-        obj.blackChoosed || 0,
-        obj.blackWon || 0,
-        obj.purpleChoosed || 0,
-        obj.purpleWon || 0
-    ];
-}
-
 export async function GetRouletteStatistics() {
     try {
         const snapshot = await getDoc(doc(firestore, 'users', auth.currentUser.uid));
         const rouletteStatistics = snapshot.data().rouletteStatistics;
-        return RouletteStatsToObject(rouletteStatistics);
+        return rouletteStatistics;
     } catch (error) {
         console.log(error.message);
     }
@@ -218,8 +223,7 @@ export async function GetRouletteStatistics() {
 
 export async function UpdateRouletteStatistics(stats) {
     try {
-        const statsArray = RouletteStatsToArray(stats);
-        updateDoc(doc(firestore, 'users', auth.currentUser.uid), { rouletteStatistics: statsArray });
+        updateDoc(doc(firestore, 'users', auth.currentUser.uid), { rouletteStatistics: stats });
     } catch (error) {
         console.log(error.message);
     }
@@ -242,7 +246,7 @@ export const ROULETTE_STATISTICS_TEXTS = [
 
 export const ROULETTE_STATISTICS_CHARS = [ '', '', '$', '$', '%', '$', '', '', '', '', '', '' ];
 
-
+// Profile
 
 export const SIDEBAR_TEXTS = [
     'Profile',
@@ -251,3 +255,22 @@ export const SIDEBAR_TEXTS = [
     'Appearance',
     'Language'
 ];
+
+// Alert
+
+export const ALERT_DATA = {
+    signOut: {
+        title: 'You want sign out?',
+        subtitle: 'You will need to login again after signing out from account',
+        confirmBackground: '#aa4444',
+        confirmText: 'Sign out',
+        confirmIcon: '/JTP/shared-assets/images/ArrowRight.svg'
+    },
+    deleteAccount: {
+        title: 'Deleting account',
+        subtitle: 'This action cannot be undone: all your data will be lost',
+        confirmBackground: '#cc2222',
+        confirmText: 'Delete account',
+        confirmIcon: '/JTP/shared-assets/images/RemoveCircleIcon.svg'
+    }
+}

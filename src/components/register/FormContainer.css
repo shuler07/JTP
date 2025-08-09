@@ -1,14 +1,14 @@
 #formContainer {
-    width: 400px;
-    height: 600px;
+    padding: 4rem 2rem;
+    width: min(calc(100% - 10rem), 320px);
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 20px;
+    gap: 1rem;
     background: #1B1B1B;
-    border-radius: 24px;
+    border-radius: 20px;
 }
 
 #formContainer::before {
@@ -27,30 +27,11 @@
 
 
 
-.formField {
-    width: 320px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.formFieldHint {
-    font-size: 0.75em;
-    height: 20px;
-}
-
-.formFieldInput {
-    width: calc(100% - 14px);
-    height: 36px;
-}
-
-
-
 #formButtonContainer {
-    margin-top: 20px;
+    margin-top: 1rem;
     position: relative;
-    width: 160px;
-    height: 40px;
+    width: calc(100% - 10rem);
+    height: 2.5rem;
     z-index: 0;
 }
 
@@ -78,13 +59,11 @@
     z-index: -1;
 }
 
-#formButton::after {
-    content: url(/shared-assets/images/Arrow16px.png);
+#formButton img {
+    content: url(/JTP/shared-assets/images/ArrowRightGradient.svg);
     position: absolute;
-    width: 16px;
-    height: 16px;
-    right: 12px;
-    top: 12px;
+    right: 0.5rem;
+    top: 0.5rem;
 }
 
 #formButton > h5 {
@@ -100,8 +79,8 @@
     background: none;
 }
 
-#formButton:hover::after {
-    content: url(/shared-assets/images/ArrowWhite16px.png);
+#formButton:hover img {
+    content: url(/JTP/shared-assets/images/ArrowRight.svg);
 }
 
 #formButton:hover > h5 {
@@ -121,7 +100,7 @@
 
 
 #formButtonResetContainer {
-    margin-top: -12px;
+    margin-top: -0.5rem;
 }
 
 #formButtonReset:hover {

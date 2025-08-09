@@ -49,7 +49,7 @@ export default function FormContainer() {
 
     const MemoizedLogo = memo(() => (
         <div style={{ position: 'relative', cursor: 'pointer' }}>
-            <img src='/JTP/shared-assets/images/Logo180px.png'></img>
+            <img src='/JTP/shared-assets/images/Logo.svg' width='180px'></img>
             <Link to='/' style={{ position: 'absolute', left: '0', width: '100%', height: '100%' }} />
         </div>
     ));
@@ -160,7 +160,22 @@ function FormButton({ setAlert, animateAlert, isRegister, _email, _password, _us
                         try {
                             await setDoc(doc(firestore, 'users', user.uid), {
                                 username: window.localStorage.getItem('username'),
+                                registerDate: new Date().toUTCString(),
                                 balance: 0,
+                                overallStatistics: [
+                                    0, // moneyFunded
+                                    0, // moneyWithdrawed
+                                    0, // moneyBet
+                                    0, // moneyWon
+                                    0, // averageBet
+                                    0, // averageWin
+                                    0, // games
+                                    'None', // favoriteGame
+                                    0, // wins
+                                    0, // winPercentage
+                                    0, // wheelGames
+                                    0, // rouletteGames
+                                ],
                                 wheelStatistics: [
                                     0, // totalSpins
                                     0, // totalWins
@@ -233,6 +248,7 @@ function FormButton({ setAlert, animateAlert, isRegister, _email, _password, _us
         <div id='formButtonContainer'>
             <button id='formButton' onClick={FormButtonHandleClick}>
                 <h5 className='gradientText'>{isRegister ? 'Register' : 'Login'}</h5>
+                <img style={{ width: '1.5rem' }} />
             </button>
         </div>
     );

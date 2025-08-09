@@ -1,11 +1,11 @@
 .colorButton {
     flex-grow: 1;
     padding: 0px;
-    height: 50px;
+    height: min(3.5rem, 50px);
     border: solid 2px #222222;
     border-radius: 12px;
     font-family: montserratMedium;
-    font-size: 1em;
+    font-size: 1rem;
     color: white;
     font-weight: normal;
     transition: all 0.5s ease;

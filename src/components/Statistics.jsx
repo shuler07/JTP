@@ -2,8 +2,7 @@ import './Statistics.css';
 
 export default function Statistics({ statistics, statisticsTexts, statisticsChars }) {
     function GetStatistics() {
-        const values = Object.values(statistics);
-        if (values.length == 0) {
+        if (statistics.length == 0) {
             return (
                 <h6
                     style={{
@@ -18,10 +17,10 @@ export default function Statistics({ statistics, statisticsTexts, statisticsChar
                 </h6>
             );
         }
-        return values.map((value, index) => (
+        return statistics.map((value, index) => (
             <div key={`keyStatistics${index}`} className='statisticsBlock'>
-                <h5>{statisticsTexts[index]}</h5>
-                <h5>
+                <h5 style={{ height: '2rem', lineHeight: '2rem' }}>{statisticsTexts[index]}</h5>
+                <h5 style={{ height: '2rem', lineHeight: '2rem' }}>
                     {value} {statisticsChars[index]}
                 </h5>
             </div>

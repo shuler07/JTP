@@ -2,9 +2,10 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { createContext, useState, useEffect, useRef } from 'react';
 
 import { auth, firestore } from './firebase';
-import { signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 
+import AppBackground from './components/AppBackground';
+import Alert from './components/Alert';
 import Header from './components/Header';
 import MainPageApp from './MainPageApp';
 import WheelPageApp from './WheelPageApp';
@@ -12,15 +13,22 @@ import RoulettePageApp from './RoulettePageApp';
 import RegisterPageApp from './RegisterPageApp';
 import ProfilePageApp from './ProfilePageApp';
 
-import { UpdateBalance } from './data';
+import { SetFuncOnLoad, isUserDataLoaded, UpdateBalance, UpdateOverallStatistics } from './data';
 
 export const AppContext = createContext();
 
 export default function App() {
-    
-    // Context values
+
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
+    SetFuncOnLoad(setIsDataLoaded);
 
     const [page, setPage] = useState('Main page');
+
+    // Alert
+
+    const [alertInfo, setAlertInfo] = useState({ alertType: '', funcConfirm: undefined });
+
+    // Balance
 
     const isBalanceLoaded = useRef(false);
     const [balance, setBalance] = useState(auth.currentUser ? 'Loading...' : 0);
@@ -36,33 +44,48 @@ export default function App() {
 
     if (auth.currentUser && !isBalanceLoaded.current) GetBalance();
 
-    return (
-        <Router basename="/JTP">
-            <AppContext.Provider
-                value={{
-                    auth,
-                    setPage,
-                    balance,
-                    setBalance,
-                }}
-            >
-                <div style={{ position: 'sticky', width: '100%', height: '0', top: '0', left: '0', zIndex: '-2' }}>
-                    <div style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100dvh', background: 'linear-gradient(to bottom, #1a1a1a, #2c2c2c)' }}></div>
-                </div>
-                {page !== 'Register' && <Header page={page} balance={balance} />}
-                <Routes>
-                    <Route index element={<MainPageApp />} />
-                    <Route path='/wheel' element={<WheelPageApp />} />
-                    <Route path='/roulette' element={<RoulettePageApp />} />
-                    <Route path='/register' element={<RegisterPageApp />} />
-                    <Route path='/profile' element={<ProfilePageApp />} />
-                </Routes>
-                {page !== 'Register' && (
-                    <pre>
-                        <button onClick={() => signOut(auth)}>Sign out</button>
-                    </pre>
-                )}
-            </AppContext.Provider>
-        </Router>
-    );
+    // Overall statistics
+
+    const isOverallStatsLoaded = useRef(false);
+    const [overallStatistics, setOverallStatistics] = useState([]);
+    useEffect(() => {
+        if (isOverallStatsLoaded.current) UpdateOverallStatistics(overallStatistics);
+    }, [overallStatistics]);
+    
+    async function GetOverallStatistics() {
+        const snapshot = await getDoc(doc(firestore, 'users', auth.currentUser.uid));
+        if (snapshot.data()) setOverallStatistics(snapshot.data().overallStatistics);
+        isOverallStatsLoaded.current = true;
+    }
+
+    if (auth.currentUser && !isOverallStatsLoaded.current) GetOverallStatistics();
+
+    if (isDataLoaded || isUserDataLoaded) {
+        return (
+            <Router basename="/JTP">
+                <AppContext.Provider
+                    value={{
+                        auth,
+                        setPage,
+                        balance,
+                        setBalance,
+                        overallStatistics,
+                        setOverallStatistics,
+                        setAlertInfo,
+                    }}
+                >
+                    {page !== 'Register' && <AppBackground />}
+                    <Alert alertInfo={alertInfo} setAlertInfo={setAlertInfo} />
+                    {page !== 'Register' && <Header page={page} balance={balance} />}
+                    <Routes>
+                        <Route index element={<MainPageApp />} />
+                        <Route path='/wheel' element={<WheelPageApp />} />
+                        <Route path='/roulette' element={<RoulettePageApp />} />
+                        <Route path='/register' element={<RegisterPageApp />} />
+                        <Route path='/profile' element={<ProfilePageApp />} />
+                    </Routes>
+                </AppContext.Provider>
+            </Router>
+        );
+    }
 }

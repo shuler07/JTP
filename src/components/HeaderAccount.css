@@ -1,11 +1,17 @@
 #headerAccountContainer {
     position: relative;
     margin: 10px;
+    flex-shrink: 1;
+    max-width: 180px;
     display: flex;
     align-items: center;
     border-radius: 30px;
     transition: all 0.25s ease;
     cursor: pointer;
+}
+
+#headerAccountContainer.Profile {
+    cursor: default;
 }
 
 #headerAccountContainer.notSignedIn {
@@ -25,7 +31,7 @@
     box-shadow: 0px -4px 20px #408CFF44, 0px 4px 20px #E148FF44;
 }
 
-#headerAccountContainer.signedIn:hover {
+#headerAccountContainer.signedIn:not(.Profile):hover {
     scale: 0.95;
     box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
 }
@@ -43,7 +49,7 @@
     z-index: -1;
 }
 
-#headerAccountContainer:hover::before {
+#headerAccountContainer:hover:not(.Profile)::before {
     background: none;
 }
 
@@ -61,15 +67,15 @@
     display: block;
 }
 
-#headerAccountContainer.signedIn:hover #headerAccountImage {
+#headerAccountContainer.signedIn:not(.Profile):hover #headerAccountImage {
     scale: 0.95;
 }
 
 #headerAccountBalance {
-    margin: 0px 20px;
-    padding: 0px 10px;
+    padding: 0px 1rem;
     width: 100%;
     text-align: center;
+    text-wrap: nowrap;
 }
 
 #headerAccountContainer.notSignedIn #headerAccountBalance {
@@ -87,12 +93,11 @@
 }
 
 #headerAccountArrow {
-    margin-left: -10px;
     margin-right: 10px;
 }
 
 #headerAccountContainer.notSignedIn #headerAccountArrow {
-    content: url(/shared-assets/images/Arrow16px.png);
+    content: url(/JTP/shared-assets/images/ArrowRightGradient.svg);
 }
 
 #headerAccountContainer.signedIn #headerAccountArrow {
@@ -100,5 +105,5 @@
 }
 
 #headerAccountContainer.notSignedIn:hover #headerAccountArrow {
-    content: url(/shared-assets/images/ArrowWhite16px.png);
+    content: url(/JTP/shared-assets/images/ArrowRight.svg);
 }

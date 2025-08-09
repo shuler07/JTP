@@ -1,11 +1,11 @@
 #historySection {
-    padding: 10px;
+    padding: 0.75rem;
 }
 
 #historyFlexContainer {
     overflow-x: scroll;
     scrollbar-width: none;
-    border-radius: 14px;
+    border-radius: 0.75rem;
     cursor: grab;
 }
 
@@ -14,9 +14,9 @@
 }
 
 .historyElement {
-    width: 40px;
-    height: 40px;
-    border-radius: 14px;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
     flex-shrink: 0;
 }
 

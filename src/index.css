@@ -18,12 +18,12 @@
 /* Media */
 
 @media (max-width: 600px) {
-    #header {
-        height: max(60px, 13dvw) !important;
+    html {
+        font-size: 75%;
     }
 
-    #header h1 {
-        font-size: min(2em, 5.3dvw);
+    #header {
+        height: max(70px, 13dvw) !important;
     }
 }
 
@@ -42,7 +42,7 @@ h1 {
     margin: 0;
     width: fit-content;
     font-family: montserratBold;
-    font-size: 2em;
+    font-size: 2rem;
     color: white;
     font-weight: normal;
 }
@@ -52,7 +52,7 @@ h2 {
     margin: 0;
     width: fit-content;
     font-family: montserratSemiBold;
-    font-size: 2em;
+    font-size: 2rem;
     color: white;
     font-weight: normal;
 }
@@ -62,7 +62,7 @@ h3 {
     margin: 0;
     width: fit-content;
     font-family: montserratMedium;
-    font-size: 2em;
+    font-size: 2rem;
     color: white;
     font-weight: normal;
 }
@@ -72,7 +72,7 @@ h4 {
     margin: 0;
     width: fit-content;
     font-family: montserratBold;
-    font-size: 1em;
+    font-size: 1rem;
     color: white;
     font-weight: normal;
 }
@@ -82,7 +82,7 @@ h5 {
     margin: 0;
     width: fit-content;
     font-family: montserratSemiBold;
-    font-size: 1em;
+    font-size: 1rem;
     color: white;
     font-weight: normal;
 }
@@ -92,19 +92,19 @@ h6 {
     margin: 0;
     width: fit-content;
     font-family: montserratMedium;
-    font-size: 1em;
+    font-size: 1rem;
     color: white;
     font-weight: normal;
 }
 
 input {
-    padding: 0px 0px 0px 10px;
+    padding-left: 1rem;
     background: #00000044;
     color: #FFFFFF77;
     font-family: montserratMedium;
-    font-size: 1em;
+    font-size: 1rem;
     border: solid 2px #FFFFFF22;
-    border-radius: 12px;
+    border-radius: 0.75rem;
     transition: all 0.5s ease;
 }
 
@@ -132,7 +132,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     background: none;
     border: none;
     font-family: montserratMedium;
-    font-size: 0.75em;
+    font-size: 0.75rem;
     color: white;
     cursor: pointer;
     transition: all 0.25s ease;
@@ -149,16 +149,54 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     transition: all 0.25s ease;
 }
 
+.iconButton {
+    height: 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    box-sizing: content-box;
+    transition: all 0.25s ease;
+}
+
+.iconButton:hover {
+    opacity: 0.9;
+}
+
+.iconButton > img {
+    transition: all 0.25s ease;
+}
+
+.iconButton:hover > img {
+    translate: 8px 0px;
+}
+
+.iconButton.little {
+    padding: 0.25rem 0.5rem;
+}
+
+.iconButton.medium {
+    padding: 0.25rem 1rem;
+}
+
+.iconButton.large {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.25rem 1rem;
+}
+
+.iconButton.large img {
+    width: 1.5rem;
+}
+
 /* Games */
 
 .mainGameWindow {
-    margin: 28px 0px;
+    margin: 2rem 0px;
     width: 100%;
-    min-height: 580px;
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between; 
-    gap: 10px;
     position: relative;
     box-shadow: 0px 10px 20px #00000044;
 }
@@ -170,8 +208,8 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 }
 
 .sideContainer {
-    margin: 20px;
-    min-width: 400px;
+    margin: 1rem;
+    min-width: 00px;
     max-width: 500px;
     display: flex;
     flex-direction: column;
@@ -187,29 +225,80 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 }
 
 .sideSection {
-    padding: 20px;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 1.5rem;
     position: relative;
     background: linear-gradient(to right, #1C1C1C, #282828);
-    border-radius: 24px;
+    border-radius: 1.5rem;
 }
 
 .sideSection > h2 {
-    font-size: 1.5em;
+    font-size: 1.5rem;
 }
 
 .sideSectionFlexContainer {
     display: flex;
-    gap: 8px;
+    gap: 0.5rem;
 }
 
 .sideSection input {
-    width: calc(100% - 14px);
-    height: 46px;
+    width: calc(100% - 1rem - 4px);
+    height: min(calc(3.5rem - 4px), 46px);
 }
 
 .sideSection input.active {
     border: solid 2px white;
+}
+
+/* Profile / Register */
+
+.bgCircle {
+    position: absolute;
+    background: radial-gradient(#408CFF, #823891 70%);
+    border-radius: 1000px;
+    filter: blur(20px);
+    z-index: -2;
+}
+
+.bgCircle.little {
+    width: clamp(100px, 10dvw, 200px);
+    height: clamp(100px, 10dvw, 200px);
+    animation: bgCircleAnim 7s infinite;
+}
+
+.bgCircle.medium {
+    width: clamp(150px, 15dvw, 250px);
+    height: clamp(150px, 15dvw, 250px);
+    animation: bgCircleAnim 9s infinite;   
+}
+
+.bgCircle.large {
+    width: clamp(200px, 20dvw, 300px);
+    height: clamp(200px, 20dvw, 300px);
+    animation: bgCircleAnim 11s infinite;
+}
+
+@keyframes bgCircleAnim {
+    50% {
+        translate: 0px 30px;
+    }
+}
+
+.formField {
+    width: min(100%, 320px);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.formFieldHint {
+    font-size: 0.75rem;
+    height: 1.5rem;
+}
+
+.formFieldInput {
+    width: calc(100% - 14px);
+    height: 2.5rem;
 }

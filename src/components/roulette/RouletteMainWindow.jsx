@@ -21,6 +21,7 @@ export default function RouletteMainWindow({
     setLastGamesArray,
 
     setStatistics,
+    setOverallStatistics
 }) {
     // Left offsets
     const mainContainer = useRef();
@@ -196,25 +197,48 @@ export default function RouletteMainWindow({
 
     function UpdateStatistics(key, isWin, finalColor, moneyWon) {
         if (key == 'start') {
-            setStatistics((stats) => ({
-                ...stats,
-                totalSpins: stats.totalSpins + 1,
-                totalMoneyBet: stats.totalMoneyBet + spinInfo.bet,
-                redChoosed: stats.redChoosed + (spinInfo.color == 'Red' ? 1 : 0),
-                blackChoosed: stats.blackChoosed + (spinInfo.color == 'Black' ? 1 : 0),
-                purpleChoosed: stats.purpleChoosed + (spinInfo.color == 'Purple' ? 1 : 0),
-            }));
+            setStatistics(stats => {
+                let newStats = [...stats];
+
+                newStats[0] += 1; // totalSpins
+                newStats[2] += spinInfo.bet; // totalMoneyBet
+                if (spinInfo.color == 'Red') newStats[6] += 1; // redChoosed
+                if (spinInfo.color == 'Black') newStats[8] += 1; // blackChoosed
+                if (spinInfo.color == 'Purple') newStats[10] += 1; // purpleChoosed
+                return newStats;
+            });
+            setOverallStatistics(stats => {
+                let newStats = [...stats];
+
+                newStats[2] += spinInfo.bet; // moneyBet
+                newStats[4] = Math.round((stats[2] + spinInfo.bet) / (stats[6] + 1) * 100) / 100; // averageBet
+                newStats[6] += 1; // games
+                if (newStats[11] + 1 > newStats[10]) newStats[7] = 'Roulette'; // favoriteGame
+                newStats[11] += 1; // rouletteGames
+                return newStats;
+            });
         } else if (key == 'finish') {
-            setStatistics((stats) => ({
-                ...stats,
-                totalWins: stats.totalWins + (isWin ? 1 : 0),
-                totalMoneyWon: stats.totalMoneyWon + (isWin ? moneyWon : 0),
-                winPercentage: Math.round(((stats.totalWins + (isWin ? 1 : 0)) / stats.totalSpins) * 1000) / 10,
-                moneyProfit: stats.totalMoneyWon + (isWin ? moneyWon : 0) - stats.totalMoneyBet,
-                redWon: stats.redWon + (isWin && finalColor == 'Red' ? 1 : 0),
-                blackWon: stats.blackWon + (isWin && finalColor == 'Black' ? 1 : 0),
-                purpleWon: stats.purpleWon + (isWin && finalColor == 'Purple' ? 1 : 0),
-            }));
+            setStatistics(stats => {
+                let newStats = [...stats];
+
+                if (isWin) newStats[1] += 1; // totalWins
+                if (isWin) newStats[3] += moneyWon; // totalMoneyWon
+                newStats[4] = Math.round(((stats[1] + (isWin ? 1 : 0)) / stats[0]) * 1000) / 10; // winPercentage
+                newStats[5] = stats[3] + (isWin ? moneyWon : 0) - stats[2]; // moneyProfit
+                if (isWin && finalColor == 'Red') newStats[7] += 1; // redWon
+                if (isWin && finalColor == 'Black') newStats[9] += 1; // blackWon
+                if (isWin && finalColor == 'Purple') newStats[11] += 1; // purplewWon
+                return newStats;
+            });
+            setOverallStatistics(stats => {
+                let newStats = [...stats];
+
+                if (isWin) newStats[3] += moneyWon; // moneyWon
+                newStats[5] = Math.round((stats[3] + (isWin ? moneyWon : 0)) / stats[6] * 100) / 100; // averageWin
+                if (isWin) newStats[8] += 1; // wins
+                newStats[9] = Math.round((stats[8] + (isWin ? 1 : 0)) / stats[6] * 1000) / 10; // winPercentage
+                return newStats;
+            });
         }
     }
 

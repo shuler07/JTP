@@ -43,7 +43,7 @@ export default function WheelPageApp() {
     }, [lastGamesArray]);
 
     const isStatsLoaded = useRef(false);
-    const [statistics, setStatistics] = useState({});
+    const [statistics, setStatistics] = useState([]);
     useEffect(() => {
         if (isStatsLoaded.current) UpdateWheelStatistics(statistics);
     }, [statistics]);
@@ -72,6 +72,7 @@ export default function WheelPageApp() {
                 setHistoryArray={setHistoryArray}
                 setLastGamesArray={setLastGamesArray}
                 setStatistics={setStatistics}
+                setOverallStatistics={context.setOverallStatistics}
             />
             <MemoizedLastGames />
             <MemoizedStatistics />
