@@ -1,0 +1,41 @@
+.predictionButton {
+    flex-grow: 1;
+    padding: 1rem;
+    height: min(3.5rem, 50px);
+    background: #3A76D0;
+    border: solid 2px #222222;
+    border-radius: 0.75rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.5s ease;
+}
+
+.predictionButton > div {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.25rem;
+}
+
+.predictionButton > img {
+    width: 2rem;
+    height: 2rem;
+}
+
+.predictionButton:hover:not(:disabled) {
+    scale: 1.05;
+    border: solid 2px #FFFFFF77;
+    cursor: pointer;
+}
+
+.predictionButton:disabled {
+    scale: 1;
+    background: #3A76D0bb;
+    border: solid 2px #00000077;
+}
+
+.predictionButton.active {
+    scale: 0.95;
+    border: solid 2px white;
+}

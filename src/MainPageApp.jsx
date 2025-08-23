@@ -18,6 +18,7 @@ export default function MainPageApp() {
                 <div id='gamesContainer'>
                     <GameCard game='Wheel' />
                     <GameCard game='Roulette' />
+                    <GameCard game='Slots' />
                 </div>
             </section>
         </main>

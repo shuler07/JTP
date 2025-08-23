@@ -1,29 +1,33 @@
+import { useEffect, useRef, useState, useMemo, useContext } from 'react';
+import { AppContext } from '../../MainApp';
+import { RouletteContext } from '../../RoulettePageApp';
+
 import RouletteMainContainer from './RouletteMainContainer';
 import RouletteSideContainer from './RouletteSideContainer';
 import ResultContainer from '../ResultContainer';
 
-import { useEffect, useRef, useState, useMemo } from 'react';
-import { ROULETTE_KOAF_VALUES, ROULETTE_HISTORY_ARRAY_LIMIT, ROULETTE_LAST_GAMES_ARRAY_LIMIT } from '../../data';
+import { ROULETTE_KOAF_VALUES, HISTORY_LIMIT, LAST_GAMES_LIMIT } from '../../data';
 
-export default function RouletteMainWindow({
-    balance,
-    setBalance,
+export default function RouletteMainWindow() {
+    // Context
 
-    spinInfo,
-    setSpinInfo,
+    const context = useContext(AppContext);
+    const rouletteContext = useContext(RouletteContext);
 
-    isDisabled,
-    setIsDisabled,
+    const balance = context.balance;
+    const setBalance = context.setBalance;
+    const setOverallStatistics = context.setOverallStatistics;
 
-    historyArray,
-    setHistoryArray,
+    const spinInfo = rouletteContext.spinInfo;
+    const isDisabled = rouletteContext.isDisabled;
+    const setIsDisabled = rouletteContext.setIsDisabled;
+    const history = rouletteContext.history;
+    const setHistory = rouletteContext.setHistory;
+    const setLastGames = rouletteContext.setLastGames;
+    const setStatistics = rouletteContext.setStatistics;
 
-    setLastGamesArray,
-
-    setStatistics,
-    setOverallStatistics
-}) {
     // Left offsets
+
     const mainContainer = useRef();
     useEffect(() => {
         if (mainContainer.current) UpdateOffsets();
@@ -52,6 +56,7 @@ export default function RouletteMainWindow({
     }
 
     // Roulette mechanics
+
     const [rouletteEndGame, setRouletteEndGame] = useState(false);
     useEffect(() => {
         if (rouletteEndGame) {
@@ -171,7 +176,7 @@ export default function RouletteMainWindow({
 
     function ShowGameResult(bgColor, finalColor, isWin, profit) {
         const resultContainer = document.getElementById('resultContainer');
-        const resultColor = document.getElementById('resultColor');
+        const resultColor = document.getElementById('resultGame');
         const resultProfit = document.getElementById('resultProfit');
 
         resultContainer.style.display = 'flex';
@@ -183,21 +188,21 @@ export default function RouletteMainWindow({
     }
 
     function UpdateHistoryAndLastGames(bgColor, userColor, finalColor, betBefore, betAfter) {
-        setHistoryArray((prev) => {
+        setHistory((prev) => {
             const current = [finalColor, ...prev];
-            current.length > ROULETTE_HISTORY_ARRAY_LIMIT && current.pop();
+            current.length > HISTORY_LIMIT && current.pop();
             return current;
         });
-        setLastGamesArray((prev) => {
+        setLastGames((prev) => {
             const current = [{ bgColor, userColor, finalColor, betBefore, betAfter }, ...prev];
-            current.length > ROULETTE_LAST_GAMES_ARRAY_LIMIT && current.pop();
+            current.length > LAST_GAMES_LIMIT && current.pop();
             return current;
         });
     }
 
     function UpdateStatistics(key, isWin, finalColor, moneyWon) {
         if (key == 'start') {
-            setStatistics(stats => {
+            setStatistics((stats) => {
                 let newStats = [...stats];
 
                 newStats[0] += 1; // totalSpins
@@ -207,18 +212,18 @@ export default function RouletteMainWindow({
                 if (spinInfo.color == 'Purple') newStats[10] += 1; // purpleChoosed
                 return newStats;
             });
-            setOverallStatistics(stats => {
+            setOverallStatistics((stats) => {
                 let newStats = [...stats];
 
                 newStats[2] += spinInfo.bet; // moneyBet
-                newStats[4] = Math.round((stats[2] + spinInfo.bet) / (stats[6] + 1) * 100) / 100; // averageBet
+                newStats[4] = Math.round(((stats[2] + spinInfo.bet) / (stats[6] + 1)) * 100) / 100; // averageBet
                 newStats[6] += 1; // games
                 if (newStats[11] + 1 > newStats[10]) newStats[7] = 'Roulette'; // favoriteGame
                 newStats[11] += 1; // rouletteGames
                 return newStats;
             });
         } else if (key == 'finish') {
-            setStatistics(stats => {
+            setStatistics((stats) => {
                 let newStats = [...stats];
 
                 if (isWin) newStats[1] += 1; // totalWins
@@ -230,13 +235,13 @@ export default function RouletteMainWindow({
                 if (isWin && finalColor == 'Purple') newStats[11] += 1; // purplewWon
                 return newStats;
             });
-            setOverallStatistics(stats => {
+            setOverallStatistics((stats) => {
                 let newStats = [...stats];
 
                 if (isWin) newStats[3] += moneyWon; // moneyWon
-                newStats[5] = Math.round((stats[3] + (isWin ? moneyWon : 0)) / stats[6] * 100) / 100; // averageWin
+                newStats[5] = Math.round(((stats[3] + (isWin ? moneyWon : 0)) / stats[6]) * 100) / 100; // averageWin
                 if (isWin) newStats[8] += 1; // wins
-                newStats[9] = Math.round((stats[8] + (isWin ? 1 : 0)) / stats[6] * 1000) / 10; // winPercentage
+                newStats[9] = Math.round(((stats[8] + (isWin ? 1 : 0)) / stats[6]) * 1000) / 10; // winPercentage
                 return newStats;
             });
         }
@@ -244,16 +249,10 @@ export default function RouletteMainWindow({
 
     // Memo
 
-    const MemoizedRouletteSideContainer = useMemo(() => (
-        <RouletteSideContainer
-            balance={balance}
-            spinInfo={spinInfo}
-            setSpinInfo={setSpinInfo}
-            isDisabled={isDisabled}
-            StartEvent={StartRouletteSpin}
-            historyArray={historyArray}
-        />
-    ), [balance, spinInfo, isDisabled, historyArray]);
+    const MemoizedRouletteSideContainer = useMemo(
+        () => <RouletteSideContainer startEvent={StartRouletteSpin} />,
+        [balance, spinInfo, isDisabled, history]
+    );
 
     return (
         <div className='mainGameWindow' style={{ background: 'linear-gradient(to right, #50B85F, #3B9C96)' }}>

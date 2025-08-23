@@ -8,16 +8,16 @@
     margin-top: 1rem;
     min-height: 5rem;
     width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-    grid-template-rows: repeat(auto-fit, 7rem);
+    display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
 }
 
 .lastGameCard {
     padding: 1rem;
-    min-width: 10rem;
+    min-width: fit-content;
     max-width: 30rem;
+    flex-grow: 1;
     height: 5rem;
     display: flex;
     justify-content: center;
@@ -27,9 +27,22 @@
     position: relative;
 }
 
+@media (max-width: 600px) {
+    .lastGameCard {
+        max-width: 100%;
+    }
+}
+
 .lastGameCardColorInfo {
     width: 4rem;
     height: 1.5rem;
     border: solid 2px #FFFFFF;
-    border-radius: 8px;
+    border-radius: 0.5rem;
+}
+
+.lastGameCardFigureInfo {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: solid 2px #ffffff;
+    border-radius: 0.5rem;
 }

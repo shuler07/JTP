@@ -1,15 +1,42 @@
 import './Alert.css';
 
-import { auth } from '../firebase';
+import { auth, firestore } from '../firebase';
 import { EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 
 import { ALERT_DATA } from '../data';
+import { doc, updateDoc } from 'firebase/firestore';
 
 export default function Alert({ alertInfo, setAlertInfo }) {
     if (alertInfo.alertType == '') return;
 
     function GetExtraFields() {
         switch (alertInfo.alertType) {
+            case 'updateEmail':
+            case 'updatePassword':
+                const type = alertInfo.alertType == 'updateEmail' ? 'email' : 'password';
+                return (
+                    <>
+                        <div className='formField'>
+                            <h6 className='formFieldHint'>Email</h6>
+                            <input id='inputEmail' className='formFieldInput' type='email'></input>
+                        </div>
+                        <div className='formField'>
+                            <h6 className='formFieldHint'>Password</h6>
+                            <input id='inputPassword' className='formFieldInput' type='password'></input>
+                        </div>
+                        <div className='formField'>
+                            <h6 className='formFieldHint'>New {type}</h6>
+                            <input id='inputNewData' className='formFieldInput' type={type}></input>
+                        </div>
+                    </>
+                );
+            case 'updateUsername':
+                return (
+                    <div className='formField'>
+                        <h6 className='formFieldHint'>Username</h6>
+                        <input id='inputUsername' className='formFieldInput' ></input>
+                    </div>
+                );
             case 'deleteAccount':
                 return (
                     <>
@@ -33,29 +60,47 @@ export default function Alert({ alertInfo, setAlertInfo }) {
         const _password = document.getElementById('inputPassword').value;
 
         try {
-            const credential = await reauthenticateWithCredential(auth.currentUser, EmailAuthProvider.credential(_email, _password));
-            if (credential) {
-                alertInfo.funcConfirm('success');
-            } else {
-                alertInfo.funcConfirm('invalid');
+            await reauthenticateWithCredential(auth.currentUser, EmailAuthProvider.credential(_email, _password));
+            switch (alertInfo.alertType) {
+                case 'updateEmail':
+                case 'updatePassword':
+                    const _newData = document.getElementById('inputNewData').value;
+                    alertInfo.funcConfirm(true, _newData);
+                    break;
+                case 'deleteAccount':
+                    alertInfo.funcConfirm(true);
+                    break;
             }
         } catch (error) {
             console.log(error.message);
+            alertInfo.funcConfirm(false);
         }
     }
 
     const handleClickClose = () => {
-        alertInfo.funcConfirm('canceled');
+        alertInfo.funcConfirm(false);
         setAlertInfo({ alertType: '', funcConfirm: undefined });
     };
 
     function handleClickConfirm() {
         switch (alertInfo.alertType) {
-            case 'signOut':
-                alertInfo.funcConfirm('success');
-                break;
+            case 'updateEmail':
+            case 'updatePassword':
             case 'deleteAccount':
-                TryReauthenticate()
+                TryReauthenticate();
+                break;
+            case 'updateUsername':
+                const _username = document.getElementById('inputUsername').value;
+                if (_username.length == 0) return;
+
+                updateDoc(doc(firestore, 'users', auth.currentUser.uid), { username: _username }).then(() => {
+                    alertInfo.funcConfirm(true);
+                }).catch((error) => {
+                    console.log(error.message);
+                    alertInfo.funcConfirm(false);
+                });
+            case 'signOut':
+                alertInfo.funcConfirm(true);
                 break;
         }
     }

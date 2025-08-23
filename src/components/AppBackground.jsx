@@ -8,7 +8,7 @@ export default function AppBackground() {
                     left: '0',
                     width: '100%',
                     height: '110dvh',
-                    background: 'linear-gradient(to bottom, #1a1a1a, #2c2c2c)',
+                    background: 'linear-gradient(to bottom, var(--bgTopColor), var(--bgBottomColor))',
                 }}
             ></div>
         </div>

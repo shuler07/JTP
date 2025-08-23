@@ -10,6 +10,12 @@
     inherits: false;
 }
 
+@property --slotsBlurColor {
+    syntax: '<color>';
+    initial-value: #B39044;
+    inherits: false;
+}
+
 
 
 #wheelImage {
@@ -54,6 +60,30 @@
 
 #rouletteCard:hover .gameCardBlur {
     --rouletteBlurColor: #3B9C9688;
+}
+
+
+
+#slotsImage {
+    right: -25px;
+    bottom: -75px;
+    width: 70%;
+    rotate: -10deg;
+}
+
+#slotsCard:hover #slotsImage {
+    right: -25px;
+    bottom: -25px;
+    width: 75%;
+    rotate: -20deg;
+}
+
+#slotsCard .gameCardBlur {
+    transition: --slotsBlurColor 0.5s ease;
+}
+
+#slotsCard:hover .gameCardBlur {
+    --slotsBlurColor: #B3904488;
 }
 
 

@@ -1,5 +1,5 @@
-#subContainer {
-    margin-right: 4%;
+#rouletteSubContainer {
+    margin-right: 2rem;
     width: min(50%, 800px);
     height: 580px;
     flex-shrink: 0;
@@ -27,7 +27,7 @@
 
 
 @media (max-width: 1000px) {
-    #subContainer {
+    #rouletteSubContainer {
         margin: 0px 40px;
         width: calc(100% - 80px);
         height: 400px;

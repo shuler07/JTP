@@ -7,6 +7,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    contain: paint;
     animation: resultContainerAnim 5s forwards;
 }
 
@@ -25,13 +26,13 @@
     }
 }
 
-#resultColor {
+#resultGame {
     opacity: 0;
     font-size: 3em;
-    animation: resultColorAnim 5s forwards;
+    animation: resultGameAnim 5s forwards;
 }
 
-@keyframes resultColorAnim {
+@keyframes resultGameAnim {
     10% {
         translate: 0px -100px;
         scale: 3;

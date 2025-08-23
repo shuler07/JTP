@@ -1,7 +1,7 @@
 import './ProfileMainWindow.css';
 
 import { auth } from '../../firebase';
-import { signOut, deleteUser } from 'firebase/auth';
+import { signOut, deleteUser, verifyBeforeUpdateEmail, updatePassword } from 'firebase/auth';
 
 import { memo, useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '../../MainApp';
@@ -137,24 +137,65 @@ function SectionStatistics() {
 }
 
 function SectionAccount({ setAlertInfo }) {
+    function handleClickEmail() {
+        setAlertInfo({
+            alertType: 'updateEmail',
+            funcConfirm: (result, _email) => {
+                if (result) {
+                    verifyBeforeUpdateEmail(auth.currentUser, _email).then(() => {
+                        signOut(auth).then(() => {
+                            window.location.pathname = '/JTP/';
+                        });
+                    });
+                }
+            },
+        });
+    }
+
+    function handleClickPassword() {
+        setAlertInfo({
+            alertType: 'updatePassword',
+            funcConfirm: (result, _password) => {
+                if (result) {
+                    updatePassword(auth.currentUser, _password).then(() => {
+                        setAlertInfo({ alertType: '', funcConfirm: undefined });
+                    });
+                }
+            },
+        });
+    }
+
+    function handleClickUsername() {
+        setAlertInfo({
+            alertType: 'updateUsername',
+            funcConfirm: (result) => {
+                if (result) {
+                    window.location.pathname = '/';
+                }
+            },
+        });
+    }
+
     function handleClickSignOut() {
-        setAlertInfo({ alertType: 'signOut', funcConfirm: (result) => {
-            if (result == 'success') {
-                signOut(auth);
-                window.location.pathname = '/';
-            }
-        } });
+        setAlertInfo({
+            alertType: 'signOut',
+            funcConfirm: (result) => {
+                if (result) {
+                    signOut(auth).then(() => window.location.pathname = '/JTP/');
+                }
+            },
+        });
     }
 
     function handleClickDeleteAccount() {
-        setAlertInfo({ alertType: 'deleteAccount', funcConfirm: (result) => {
-            if (result == 'success') {
-                deleteUser(auth.currentUser);
-                window.location.pathname = '/';
-            } else if (result == 'invalid') {
-                console.log('Invalid email or password');
-            }
-        } });
+        setAlertInfo({
+            alertType: 'deleteAccount',
+            funcConfirm: (result) => {
+                if (result) {
+                    deleteUser(auth.currentUser).then(() => window.location.pathname = '/JTP/');
+                }
+            },
+        });
     }
 
     return (
@@ -165,21 +206,36 @@ function SectionAccount({ setAlertInfo }) {
                     <h6 style={{ color: '#BDBDBD' }}>Email</h6>
                     <div className='grayInfoFieldRight'>
                         <h6>{auth.currentUser.email}</h6>
-                        <img className='editPencil' src='/JTP/shared-assets/images/EditPencilIcon.png' style={{ width: '1.5rem' }} />
+                        <img
+                            className='editPencil'
+                            src='/JTP/shared-assets/images/EditPencilIcon.png'
+                            style={{ width: '1.5rem' }}
+                            onClick={handleClickEmail}
+                        />
                     </div>
                 </div>
                 <div className='grayInfoField'>
                     <h6 style={{ color: '#BDBDBD' }}>Password</h6>
                     <div className='grayInfoFieldRight'>
                         <h6>********</h6>
-                        <img className='editPencil' src='/JTP/shared-assets/images/EditPencilIcon.png' style={{ width: '1.5rem' }} />
+                        <img
+                            className='editPencil'
+                            src='/JTP/shared-assets/images/EditPencilIcon.png'
+                            style={{ width: '1.5rem' }}
+                            onClick={handleClickPassword}
+                        />
                     </div>
                 </div>
                 <div className='grayInfoField'>
                     <h6 style={{ color: '#BDBDBD' }}>Username</h6>
                     <div className='grayInfoFieldRight'>
                         <h6>{username}</h6>
-                        <img className='editPencil' src='/JTP/shared-assets/images/EditPencilIcon.png' style={{ width: '1.5rem' }} />
+                        <img
+                            className='editPencil'
+                            src='/JTP/shared-assets/images/EditPencilIcon.png'
+                            style={{ width: '1.5rem' }}
+                            onClick={handleClickUsername}
+                        />
                     </div>
                 </div>
                 <div style={{ width: '100%', display: 'flex', gap: '1rem' }}>

@@ -1,7 +1,7 @@
-import { useEffect, useState, useContext, useRef, memo, createContext } from 'react';
+import { useContext, useEffect, useState, useRef, memo, createContext } from 'react';
 import { AppContext } from './MainApp';
 
-import RouletteMainWindow from './components/roulette/RouletteMainWindow';
+import SlotsMainWindow from './components/slots/SlotsMainWindow';
 import LastGames from './components/LastGames';
 import Statistics from './components/Statistics';
 
@@ -9,48 +9,48 @@ import {
     GetFromLocalStorageByKey,
     GetStatisticsByKey,
     UpdateStatisticsByKey,
-    ROULETTE_STATISTICS_TEXTS,
-    ROULETTE_STATISTICS_CHARS,
+    SLOTS_STATISTICS_TEXTS,
+    SLOTS_STATISTICS_CHARS,
 } from './data';
 
-export const RouletteContext = createContext();
+export const SlotsContext = createContext();
 
-export default function RoulettePageApp() {
+export default function SlotsPageApp() {
     // Context
 
     const context = useContext(AppContext);
     useEffect(() => {
-        context.setPage('Roulette');
+        context.setPage('Slots');
     }, []);
 
     // Spin info / Disabled buttons
 
     const [spinInfo, setSpinInfo] = useState({
         bet: 0,
-        color: '',
+        figure: '',
     });
     const [isDisabled, setIsDisabled] = useState(false);
 
     // History, Last games, Statistics
 
-    const [history, setHistory] = useState(GetFromLocalStorageByKey('ROULETTE_HISTORY'));
+    const [history, setHistory] = useState(GetFromLocalStorageByKey('SLOTS_HISTORY'));
     useEffect(() => {
-        window.localStorage.setItem('ROULETTE_HISTORY', JSON.stringify(history));
+        window.localStorage.setItem('SLOTS_HISTORY', JSON.stringify(history));
     }, [history]);
 
-    const [lastGames, setLastGames] = useState(GetFromLocalStorageByKey('ROULETTE_LAST_GAMES'));
+    const [lastGames, setLastGames] = useState(GetFromLocalStorageByKey('SLOTS_LAST_GAMES'));
     useEffect(() => {
-        window.localStorage.setItem('ROULETTE_LAST_GAMES', JSON.stringify(lastGames));
+        window.localStorage.setItem('SLOTS_LAST_GAMES', JSON.stringify(lastGames));
     }, [lastGames]);
 
     const isStatsLoaded = useRef(false);
     const [statistics, setStatistics] = useState([]);
     useEffect(() => {
-        if (isStatsLoaded.current) UpdateStatisticsByKey('rouletteStatistics', statistics);
+        if (isStatsLoaded.current) UpdateStatisticsByKey('slotsStatistics', statistics);
     }, [statistics]);
 
     async function GetStatistics() {
-        const stats = await GetStatisticsByKey('rouletteStatistics');
+        const stats = await GetStatisticsByKey('slotsStatistics');
         setStatistics(stats);
         isStatsLoaded.current = true;
     }
@@ -60,11 +60,11 @@ export default function RoulettePageApp() {
     // Memo
 
     const MemoizedLastGames = memo(() => <LastGames lastGames={lastGames} />);
-    const MemoizedStatistics = memo(() => <Statistics statistics={statistics} statisticsTexts={ROULETTE_STATISTICS_TEXTS} statisticsChars={ROULETTE_STATISTICS_CHARS} />);
+    const MemoizedStatistics = memo(() => <Statistics statistics={statistics} statisticsTexts={SLOTS_STATISTICS_TEXTS} statisticsChars={SLOTS_STATISTICS_CHARS} />);
 
     return (
         <main>
-            <RouletteContext.Provider
+            <SlotsContext.Provider
                 value={{
                     spinInfo,
                     setSpinInfo,
@@ -76,10 +76,10 @@ export default function RoulettePageApp() {
                     setStatistics,
                 }}
             >
-                <RouletteMainWindow />
+                <SlotsMainWindow />
                 <MemoizedLastGames />
                 <MemoizedStatistics />
-            </RouletteContext.Provider>
+            </SlotsContext.Provider>
         </main>
     );
 }

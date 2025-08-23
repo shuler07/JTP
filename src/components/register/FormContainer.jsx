@@ -11,7 +11,7 @@ import {
     sendPasswordResetEmail,
     signOut,
 } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { collection, CollectionReference, doc, getDoc, setDoc } from 'firebase/firestore';
 
 export default function FormContainer() {
     const [isRegister, setIsRegister] = useState(true);
@@ -175,6 +175,7 @@ function FormButton({ setAlert, animateAlert, isRegister, _email, _password, _us
                                     0, // winPercentage
                                     0, // wheelGames
                                     0, // rouletteGames
+                                    0, // slotsGames
                                 ],
                                 wheelStatistics: [
                                     0, // totalSpins
@@ -206,6 +207,24 @@ function FormButton({ setAlert, animateAlert, isRegister, _email, _password, _us
                                     0, // purpleChoosed
                                     0, // purpleWon
                                 ],
+                                slotsStatistics: [
+                                    0, // totalSpins 0
+                                    0, // totalWins 1
+                                    0, // totalMoneyBet 2
+                                    0, // totalMoneyWon 3
+                                    0, // winPercentage 4
+                                    0, // moneyProfit 5 
+                                    0, // cubesChoosed 6
+                                    0, // cubesWon 7
+                                    0, // starChoosed 8 
+                                    0, // starWon 9
+                                    0, // sticksChoosed 10
+                                    0, // sticksWon 11 
+                                    0, // emeraldChoosed 12
+                                    0, // emeraldWon 13
+                                    0, // sevenChoosed 14
+                                    0 // sevenWon 15
+                                ]
                             });
                             alert = '';
                             window.location.pathname = '/JTP/';
@@ -235,7 +254,6 @@ function FormButton({ setAlert, animateAlert, isRegister, _email, _password, _us
 
     function ValidateCredential(_email, _password) {
         const _passwordSet = new Set(_password);
-        console.log(_password.length);
 
         if (_password.length < 8) return 'Short password';
         if (_passwordSet.size <= _password.length / 3) return 'Too many repeating symbols';

@@ -8,7 +8,9 @@ import { onAuthStateChanged } from 'firebase/auth';
 
 import App from './MainApp.jsx';
 
-import { GetUserData } from './data.js';
+import { GetUserData, ApplyTheme } from './data.js';
+
+ApplyTheme();
 
 const rootElement = document.getElementById('root');
 let root;

@@ -1,7 +1,7 @@
 import { auth, firestore } from "./firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 
-export const htmlElement = document.getElementsByTagName('html')[0];
+export const htmlElement = document.documentElement;
 export const pxToNum = (value) => parseFloat(value.replace('px', ''));
 
 // User data
@@ -44,7 +44,24 @@ export let userSettings = _userSettings != null ? JSON.parse(_userSettings) : {
     fontSize: 'Medium'
 };
 
-export const updateUserSettings = (settings) => userSettings = settings;
+export const updateUserSettings = (settings) => {
+    userSettings = settings;
+    ApplyTheme();
+};
+
+export function ApplyTheme() {
+    htmlElement.classList.remove('lightTheme', 'darkTheme');
+    
+    switch (userSettings.theme) {
+        case 'Light':
+            htmlElement.classList.add('lightTheme');
+            break;
+        case 'Dark':
+        default:
+            htmlElement.classList.add('darkTheme');
+            break;
+    }
+};
 
 export const OVERALL_STATISTICS_TEXTS = [
     'Money funded',
@@ -58,10 +75,11 @@ export const OVERALL_STATISTICS_TEXTS = [
     'Wins',
     'Win percentage',
     'Wheel games',
-    'Roulette games'
+    'Roulette games',
+    'Slots games'
 ];
 
-export const OVERALL_STATISTICS_CHARS = [ '$', '$', '$', '$', '$', '$', '', '', '', '%', '', '' ];
+export const OVERALL_STATISTICS_CHARS = [ '$', '$', '$', '$', '$', '$', '', '', '', '%', '', '', '' ];
 
 export async function GetUserData() {
     function GetRegisterDaysAgo() {
@@ -95,7 +113,9 @@ export async function GetUserData() {
 
 export const HEADER_POPUP_TEXTS = {
     Wheel: 'Wheel consists of 40 parts: 18 red, 18 black, 3 yellow and 1 green',
-    Roulette: 'Roulette consists of 30 parts: 14 red, 14 black and 2 purple'
+    Roulette: 'Roulette consists of 30 parts: 14 red, 14 black and 2 purple',
+    Slots: 'The final award is calculating by multiplying base koaf of figure you picked and count of slots you predicted right \
+    : 1 slot - 0.1, 2 slots - 1, 3 slots - 5. Than more base koaf of figure than less often this figure dropping',
 };
 
 export const GAME_CARDS_DATA = {
@@ -114,6 +134,14 @@ export const GAME_CARDS_DATA = {
         image: `/JTP/shared-assets/images/Roulette.png`,
         imageId: 'rouletteImage',
         navigateTo: '/roulette'
+    },
+    Slots: {
+        id: 'slotsCard',
+        background: 'linear-gradient(to right bottom, #B34444, #B39044)',
+        blurBackground: 'linear-gradient(to right bottom, #B3444400, var(--slotsBlurColor))',
+        image: '/JTP/shared-assets/images/Slots.png',
+        imageId: 'slotsImage',
+        navigateTo: '/slots'
     }
 };
 
@@ -121,7 +149,7 @@ export const GAME_CARDS_DATA = {
 
 export let BET_VALUES = [ 1, 5, 10, 20, 50 ];
 
-// Color values
+// Color / Koaf values
 
 export const WHEEL_COLOR_VALUES = [ 'Red', 'Black', 'Yellow', 'Green' ];
 
@@ -140,7 +168,25 @@ export const ROULETTE_KOAF_VALUES = {
     Purple: 10
 };
 
-export const ATTR_BY_COLOR_VALUES = {
+export const SLOTS_FIGURE_VALUES = [ 'Cubes', 'Star', 'Sticks', 'Emerald', 'Seven' ];
+
+export const SLOTS_KOAF_VALUES = {
+    Cubes: 2,
+    Star: 2,
+    Sticks: 5,
+    Emerald: 10,
+    Seven: 20
+};
+
+export const FIGURE_BY_VALUE = {
+    Cubes: '/JTP/shared-assets/images/SlotsImageCubes.png',
+    Star: '/JTP/shared-assets/images/SlotsImageStar.png',
+    Sticks: '/JTP/shared-assets/images/SlotsImageSticks.png',
+    Emerald: '/JTP/shared-assets/images/SlotsImageEmerald.png',
+    Seven: '/JTP/shared-assets/images/SlotsImageSeven.png'
+};
+
+export const COLOR_BY_VALUE = {
     Red: 'FF4B4B',
     Black: '181818',
     Yellow: 'DEC84A',
@@ -148,45 +194,30 @@ export const ATTR_BY_COLOR_VALUES = {
     Purple: 'B356D8'
 }
 
-// History, Last games, Statistics
+// Local storage (History, last games)
 
-export function GetWheelHistoryArray() {
-    let _wheel_history_array = window.localStorage.getItem('WHEEL_HISTORY_ARRAY');
-    return _wheel_history_array != null ? JSON.parse(_wheel_history_array) : []
+export function GetFromLocalStorageByKey(key) {
+    let _data = window.localStorage.getItem(key);
+    return _data != null ? JSON.parse(_data) : [];
 }
-export const WHEEL_HISTORY_ARRAY_LIMIT = 40;
 
-export function GetWheelLastGamesArray() {
-    let _wheel_last_games_array = window.localStorage.getItem('WHEEL_LAST_GAMES_ARRAY');
-    return _wheel_last_games_array != null ? JSON.parse(_wheel_last_games_array) : [];
-}
-export const WHEEL_LAST_GAMES_ARRAY_LIMIT = 24;
+export const HISTORY_LIMIT = 40;
+export const LAST_GAMES_LIMIT = 24;
 
-export function GetRouletteHistoryArray() {
-    let _roulette_history_array = window.localStorage.getItem('ROULETTE_HISTORY_ARRAY');
-    return _roulette_history_array != null ? JSON.parse(_roulette_history_array) : [];
-}
-export const ROULETTE_HISTORY_ARRAY_LIMIT = 40;
+// Statistics
 
-export function GetRouletteLastGamesArray() {
-    let _roulette_last_games_array = window.localStorage.getItem('ROULETTE_LAST_GAMES_ARRAY');
-    return _roulette_last_games_array != null ? JSON.parse(_roulette_last_games_array) : [];
-}
-export const ROULETTE_LAST_GAMES_ARRAY_LIMIT = 24;
-
-export async function GetWheelStatistics() {
+export async function GetStatisticsByKey(key) {
     try {
         const snapshot = await getDoc(doc(firestore, 'users', auth.currentUser.uid));
-        const wheelStatistics = snapshot.data().wheelStatistics;
-        return wheelStatistics;
+        return snapshot.data()[key];
     } catch (error) {
         console.log(error.message);
     }
 }
 
-export async function UpdateWheelStatistics(stats) {
+export async function UpdateStatisticsByKey(key, stats) {
     try {
-        updateDoc(doc(firestore, 'users', auth.currentUser.uid), { wheelStatistics: stats });
+        updateDoc(doc(firestore, 'users', auth.currentUser.uid), { [key]: stats });
     } catch (error) {
         console.log(error.message);
     }
@@ -211,24 +242,6 @@ export const WHEEL_STATISTICS_TEXTS = [
 
 export const WHEEL_STATISTICS_CHARS = [ '', '', '$', '$', '%', '$', '', '', '', '', '', '', '', '' ];
 
-export async function GetRouletteStatistics() {
-    try {
-        const snapshot = await getDoc(doc(firestore, 'users', auth.currentUser.uid));
-        const rouletteStatistics = snapshot.data().rouletteStatistics;
-        return rouletteStatistics;
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-export async function UpdateRouletteStatistics(stats) {
-    try {
-        updateDoc(doc(firestore, 'users', auth.currentUser.uid), { rouletteStatistics: stats });
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
 export const ROULETTE_STATISTICS_TEXTS = [
     'Total spins',
     'Total wins',
@@ -246,6 +259,27 @@ export const ROULETTE_STATISTICS_TEXTS = [
 
 export const ROULETTE_STATISTICS_CHARS = [ '', '', '$', '$', '%', '$', '', '', '', '', '', '' ];
 
+export const SLOTS_STATISTICS_TEXTS = [
+    'Total spins',
+    'Total wins',
+    'Total money bet',
+    'Total money won',
+    'Win percentage',
+    'Money profit',
+    'Cubes choosed',
+    'Cubes won',
+    'Star choosed',
+    'Star won',
+    'Sticks choosed',
+    'Sticks won',
+    'Emerald choosed',
+    'Emerald won',
+    'Seven choosed',
+    'Seven won'
+];
+
+export const SLOTS_STATISTICS_CHARS = [ '', '', '$', '$', '%', '$', '', '', '', '', '', '', '', '', '', '' ];
+
 // Profile
 
 export const SIDEBAR_TEXTS = [
@@ -259,8 +293,29 @@ export const SIDEBAR_TEXTS = [
 // Alert
 
 export const ALERT_DATA = {
+    updateEmail: {
+        title: 'Changing email',
+        subtitle: 'After changing email you will need to verify your new email and relogin',
+        confirmBackground: '#44aa44',
+        confirmText: 'Change email',
+        confirmIcon: '/JTP/shared-assets/images/ArrowRight.svg'
+    },
+    updatePassword: {
+        title: 'Changing password',
+        subtitle: 'Enter your current email and password and provide the new password',
+        confirmBackground: '#44aa44',
+        confirmText: 'Change password',
+        confirmIcon: '/JTP/shared-assets/images/ArrowRight.svg'
+    },
+    updateUsername: {
+        title: 'Changing username',
+        subtitle: 'Provide new username',
+        confirmBackground: '#44aa44',
+        confirmText: 'Change username',
+        confirmIcon: '/JTP/shared-assets/images/ArrowRight.svg'
+    },
     signOut: {
-        title: 'You want sign out?',
+        title: 'Signing out',
         subtitle: 'You will need to login again after signing out from account',
         confirmBackground: '#aa4444',
         confirmText: 'Sign out',
@@ -268,7 +323,7 @@ export const ALERT_DATA = {
     },
     deleteAccount: {
         title: 'Deleting account',
-        subtitle: 'This action cannot be undone: all your data will be lost',
+        subtitle: 'WARNING! This action cannot be undone - all your data will be lost',
         confirmBackground: '#cc2222',
         confirmText: 'Delete account',
         confirmIcon: '/JTP/shared-assets/images/RemoveCircleIcon.svg'

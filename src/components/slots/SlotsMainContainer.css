@@ -1,0 +1,56 @@
+#slotsSubContainer {
+    margin: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#slotsMainContainer {
+    display: flex;
+    gap: 0.5rem;
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        #ffffff 15%,
+        #ffffff 85%,
+        transparent 100%
+    );
+}
+
+@media (max-width: 1000px) {
+    #slotsSubContainer {
+        width: 100%;
+    }
+}
+
+.slotSection {
+    height: 20rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+    background: linear-gradient(#00000055, #000000ee 30%, #000000ee 70%, #00000055);
+}
+
+.mainSlotItem {
+    width: 10rem;
+    height: 10rem;
+    animation: none;
+}
+
+.sideSlotItem {
+    width: 10rem;
+    height: 10rem;
+    position: absolute;
+    left: 0;
+    top: -10rem;
+    animation: none;
+}
+
+@keyframes slotItemAnim {
+    0% {
+        translate: 0px 0px;
+    }
+    100% {
+        translate: 0px 15rem;
+    }
+}

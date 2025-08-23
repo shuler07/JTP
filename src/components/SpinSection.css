@@ -24,7 +24,7 @@
 #spinButton:disabled {
     scale: 0.95;
     border: solid 2px #555555;
-    background: #666666;
+    background: #666666 !important;
     box-shadow: none;
     transition: scale 0.5s ease;
 }
@@ -35,6 +35,6 @@
 
 
 
-.Wheel { background: linear-gradient(to right, #4C9AFF, #E148FF); }
-
-.Roulette { background: linear-gradient(to right, #50B85F, #3B9C96); }
+#spinButton.Wheel { background: linear-gradient(to right, #4C9AFF, #E148FF); }
+#spinButton.Roulette { background: linear-gradient(to right, #50B85F, #3B9C96); }
+#spinButton.Slots { background: linear-gradient(to right, #B34444, #B39044); }

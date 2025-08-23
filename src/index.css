@@ -15,6 +15,68 @@
     src: url(/shared-assets/fonts/Montserrat-Medium.ttf);
 }
 
+/* Themes */
+
+.lightTheme {
+    --bgTopColor: #d0d0d0;
+    --bgBottomColor: #b2b2b2;
+    --textColor: #000000;
+    --accentColor: #4C9AFF;
+    --secondaryColor: #9137BB;
+    
+    --headerBgColor: #d9d9d9;
+    --cardBgColor: #00000019;
+    --sectionBgColor: #3A76D0;
+    --sectionBgColorTransparent: #3A76D0bb;
+    --successColor: #5BC762;
+    --errorColor: #ff3e3e;
+    --warningColor: #DEC84A;
+    --overlayColor: #00000044;
+    --overlayColorLight: #00000032;
+    --overlayColorMedium: #000000bb;
+    --buttonHoverColor: #3eb2ff;
+    --buttonHoverColorTransparent: #3eb2ff00;
+    --formBgColor: #f0f0f0;
+    --formInputBgColor: #e8e8e8;
+    --disabledColor: #999999;
+    
+    --redColor: #FF4B4B;
+    --blackColor: #4A4A4A;
+    --yellowColor: #DEC84A;
+    --greenColor: #56D86A;
+    --purpleColor: #B356D8;
+}
+
+.darkTheme {
+    --bgTopColor: #1a1a1a;
+    --bgBottomColor: #2c2c2c;
+    --textColor: #ffffff;
+    --accentColor: #4C9AFF;
+    --secondaryColor: #9137BB;
+    
+    --headerBgColor: #141414;
+    --cardBgColor: #ffffff19;
+    --sectionBgColor: #3A76D0;
+    --sectionBgColorTransparent: #3A76D0bb;
+    --successColor: #5BC762;
+    --errorColor: #ff3e3e;
+    --warningColor: #DEC84A;
+    --overlayColor: #00000044;
+    --overlayColorLight: #00000032;
+    --overlayColorMedium: #000000bb;
+    --buttonHoverColor: #3eb2ff;
+    --buttonHoverColorTransparent: #3eb2ff00;
+    --formBgColor: #1B1B1B;
+    --formInputBgColor: #161616;
+    --disabledColor: #666666;
+    
+    --redColor: #FF4B4B;
+    --blackColor: #4A4A4A;
+    --yellowColor: #DEC84A;
+    --greenColor: #56D86A;
+    --purpleColor: #B356D8;
+}
+
 /* Media */
 
 @media (max-width: 600px) {
@@ -35,6 +97,9 @@
 
 body {
     margin: 0;
+    background: linear-gradient(to bottom, var(--bgTopColor), var(--bgBottomColor));
+    color: var(--textColor);
+    min-height: 100vh;
 }
 
 h1 {
@@ -43,8 +108,8 @@ h1 {
     width: fit-content;
     font-family: montserratBold;
     font-size: 2rem;
-    color: white;
     font-weight: normal;
+    color: var(--textColor);
 }
 
 h2 {
@@ -53,8 +118,8 @@ h2 {
     width: fit-content;
     font-family: montserratSemiBold;
     font-size: 2rem;
-    color: white;
     font-weight: normal;
+    color: var(--textColor);
 }
 
 h3 {
@@ -63,8 +128,8 @@ h3 {
     width: fit-content;
     font-family: montserratMedium;
     font-size: 2rem;
-    color: white;
     font-weight: normal;
+    color: var(--textColor);
 }
 
 h4 {
@@ -73,8 +138,8 @@ h4 {
     width: fit-content;
     font-family: montserratBold;
     font-size: 1rem;
-    color: white;
     font-weight: normal;
+    color: var(--textColor);
 }
 
 h5 {
@@ -83,8 +148,8 @@ h5 {
     width: fit-content;
     font-family: montserratSemiBold;
     font-size: 1rem;
-    color: white;
     font-weight: normal;
+    color: var(--textColor);
 }
 
 h6 {
@@ -93,8 +158,8 @@ h6 {
     width: fit-content;
     font-family: montserratMedium;
     font-size: 1rem;
-    color: white;
     font-weight: normal;
+    color: var(--textColor);
 }
 
 input {
@@ -133,7 +198,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     border: none;
     font-family: montserratMedium;
     font-size: 0.75rem;
-    color: white;
+    color: var(--textColor);
     cursor: pointer;
     transition: all 0.25s ease;
 }
@@ -209,8 +274,8 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 
 .sideContainer {
     margin: 1rem;
-    min-width: 00px;
-    max-width: 500px;
+    min-width: 20rem;
+    max-width: 40rem;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -240,6 +305,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 
 .sideSectionFlexContainer {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
 }
 

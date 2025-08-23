@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useRef, memo } from 'react';
+import { useEffect, useState, useContext, useRef, memo, createContext } from 'react';
 import { AppContext } from './MainApp';
 
 import WheelMainWindow from './components/wheel/WheelMainWindow';
@@ -6,13 +6,14 @@ import LastGames from './components/LastGames';
 import Statistics from './components/Statistics';
 
 import {
-    GetWheelHistoryArray,
-    GetWheelLastGamesArray,
-    GetWheelStatistics,
-    UpdateWheelStatistics,
+    GetFromLocalStorageByKey,
+    GetStatisticsByKey,
+    UpdateStatisticsByKey,
     WHEEL_STATISTICS_TEXTS,
     WHEEL_STATISTICS_CHARS,
 } from './data';
+
+export const WheelContext = createContext();
 
 export default function WheelPageApp() {
     // Context
@@ -32,50 +33,53 @@ export default function WheelPageApp() {
 
     // History, Last games, Statistics
 
-    const [historyArray, setHistoryArray] = useState(GetWheelHistoryArray());
+    const [history, setHistory] = useState(GetFromLocalStorageByKey('WHEEL_HISTORY'));
     useEffect(() => {
-        window.localStorage.setItem('WHEEL_HISTORY_ARRAY', JSON.stringify(historyArray));
-    }, [historyArray]);
+        window.localStorage.setItem('WHEEL_HISTORY', JSON.stringify(history));
+    }, [history]);
 
-    const [lastGamesArray, setLastGamesArray] = useState(GetWheelLastGamesArray());
+    const [lastGames, setLastGames] = useState(GetFromLocalStorageByKey('WHEEL_LAST_GAMES'));
     useEffect(() => {
-        window.localStorage.setItem('WHEEL_LAST_GAMES_ARRAY', JSON.stringify(lastGamesArray));
-    }, [lastGamesArray]);
+        window.localStorage.setItem('WHEEL_LAST_GAMES', JSON.stringify(lastGames));
+    }, [lastGames]);
 
     const isStatsLoaded = useRef(false);
     const [statistics, setStatistics] = useState([]);
     useEffect(() => {
-        if (isStatsLoaded.current) UpdateWheelStatistics(statistics);
+        if (isStatsLoaded.current) UpdateStatisticsByKey('wheelStatistics', statistics);
     }, [statistics]);
 
     async function GetStatistics() {
-        const stats = await GetWheelStatistics();
+        const stats = await GetStatisticsByKey('wheelStatistics');
         setStatistics(stats);
         isStatsLoaded.current = true;
     }
 
     if (context.auth.currentUser && !isStatsLoaded.current) GetStatistics();
 
-    const MemoizedLastGames = memo(() => <LastGames lastGamesArray={lastGamesArray} />);
+    // Memo
+
+    const MemoizedLastGames = memo(() => <LastGames lastGames={lastGames} />);
     const MemoizedStatistics = memo(() => <Statistics statistics={statistics} statisticsTexts={WHEEL_STATISTICS_TEXTS} statisticsChars={WHEEL_STATISTICS_CHARS} />);
 
     return (
         <main>
-            <WheelMainWindow
-                balance={context.balance}
-                setBalance={context.setBalance}
-                spinInfo={spinInfo}
-                setSpinInfo={setSpinInfo}
-                isDisabled={isDisabled}
-                setIsDisabled={setIsDisabled}
-                historyArray={historyArray}
-                setHistoryArray={setHistoryArray}
-                setLastGamesArray={setLastGamesArray}
-                setStatistics={setStatistics}
-                setOverallStatistics={context.setOverallStatistics}
-            />
-            <MemoizedLastGames />
-            <MemoizedStatistics />
+            <WheelContext.Provider
+                value={{
+                    spinInfo,
+                    setSpinInfo,
+                    isDisabled,
+                    setIsDisabled,
+                    history,
+                    setHistory,
+                    setLastGames,
+                    setStatistics,
+                }}
+            >
+                <WheelMainWindow />
+                <MemoizedLastGames />
+                <MemoizedStatistics />
+            </WheelContext.Provider>
         </main>
     );
 }

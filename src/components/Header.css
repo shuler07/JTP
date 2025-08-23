@@ -4,7 +4,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #141414;
+    background: var(--headerBgColor);
     position: relative;
     z-index: 1;
 }

@@ -13,28 +13,28 @@
 
 @keyframes alertContainerAnim {
     0% {
-        backdrop-filter: blur(0.1px);
-    }
-    20% {
         backdrop-filter: blur(1px);
     }
-    40% {
+    20% {
         backdrop-filter: blur(2px);
     }
-    60% {
-        backdrop-filter: blur(3px);
-    }
-    80% {
+    40% {
         backdrop-filter: blur(4px);
     }
-    100% {
+    60% {
         backdrop-filter: blur(6px);
+    }
+    80% {
+        backdrop-filter: blur(8px);
+    }
+    100% {
+        backdrop-filter: blur(10px);
     }
 }
 
 #alertWindow {
     padding: 1rem;
-    width: 25%;
+    width: max(400px, 25%);
     position: relative;
     border-radius: 24px;
     background: #000000bb;
@@ -42,7 +42,7 @@
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    animation: alertWindowAnim 0.25s forwards;
+    animation: alertWindowAnim 0.5s forwards;
 }
 
 @media (max-width: 600px) {

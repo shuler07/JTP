@@ -1,12 +1,9 @@
-#historySection {
-    padding: 0.75rem;
-}
-
 #historyFlexContainer {
     overflow-x: scroll;
     scrollbar-width: none;
     border-radius: 0.75rem;
     cursor: grab;
+    flex-wrap: nowrap;
 }
 
 .dragging {

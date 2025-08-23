@@ -10,6 +10,7 @@ import Header from './components/Header';
 import MainPageApp from './MainPageApp';
 import WheelPageApp from './WheelPageApp';
 import RoulettePageApp from './RoulettePageApp';
+import SlotsPageApp from './SlotsPageApp';
 import RegisterPageApp from './RegisterPageApp';
 import ProfilePageApp from './ProfilePageApp';
 
@@ -18,7 +19,6 @@ import { SetFuncOnLoad, isUserDataLoaded, UpdateBalance, UpdateOverallStatistics
 export const AppContext = createContext();
 
 export default function App() {
-
     const [isDataLoaded, setIsDataLoaded] = useState(false);
     SetFuncOnLoad(setIsDataLoaded);
 
@@ -27,6 +27,10 @@ export default function App() {
     // Alert
 
     const [alertInfo, setAlertInfo] = useState({ alertType: '', funcConfirm: undefined });
+    useEffect(() => {
+        if (alertInfo.alertType !== '') document.body.style.overflow = 'hidden';
+        else document.body.style.overflow = 'visible';
+    }, [alertInfo]);
 
     // Balance
 
@@ -51,7 +55,7 @@ export default function App() {
     useEffect(() => {
         if (isOverallStatsLoaded.current) UpdateOverallStatistics(overallStatistics);
     }, [overallStatistics]);
-    
+
     async function GetOverallStatistics() {
         const snapshot = await getDoc(doc(firestore, 'users', auth.currentUser.uid));
         if (snapshot.data()) setOverallStatistics(snapshot.data().overallStatistics);
@@ -62,18 +66,8 @@ export default function App() {
 
     if (isDataLoaded || isUserDataLoaded) {
         return (
-            <Router basename="/JTP">
-                <AppContext.Provider
-                    value={{
-                        auth,
-                        setPage,
-                        balance,
-                        setBalance,
-                        overallStatistics,
-                        setOverallStatistics,
-                        setAlertInfo,
-                    }}
-                >
+            <Router basename='/JTP'>
+                <AppContext.Provider value={{ auth, setPage, balance, setBalance, overallStatistics, setOverallStatistics, setAlertInfo }}>
                     {page !== 'Register' && <AppBackground />}
                     <Alert alertInfo={alertInfo} setAlertInfo={setAlertInfo} />
                     {page !== 'Register' && <Header page={page} balance={balance} />}
@@ -81,6 +75,7 @@ export default function App() {
                         <Route index element={<MainPageApp />} />
                         <Route path='/wheel' element={<WheelPageApp />} />
                         <Route path='/roulette' element={<RoulettePageApp />} />
+                        <Route path='/slots' element={<SlotsPageApp />} />
                         <Route path='/register' element={<RegisterPageApp />} />
                         <Route path='/profile' element={<ProfilePageApp />} />
                     </Routes>
